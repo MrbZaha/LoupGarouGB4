@@ -6,7 +6,7 @@
 ### Sous linux (testé sous Linux Mint)
 Ouvrez votre terminal depuis la source du projet
 
-#### Etape 1 : Compiler
+#### Etape 1 : Compiler (Non nécessaire pour cette version du projet car déjà réalisé)
 Entrez la ligne suivante dans votre terminal : 
 javac -d bin src/main/java/**/*.java
 
