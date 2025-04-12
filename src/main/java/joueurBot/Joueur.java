@@ -22,7 +22,7 @@ public class Joueur {
 
     private Personnages perso;
 
-    private boolean isBot=true;
+//    private boolean isBot=true;
     private Bot botRattache;
 
     private Joueur joueurDiscussion;
@@ -36,9 +36,9 @@ public class Joueur {
         setPerso(personnage);
 
         this.botRattache=bot;
-        if (bot==null){
-            this.isBot=false;
-        }
+//        if (bot==null){
+//            this.isBot=false;
+//        }
     }
 
     //Setters
@@ -106,7 +106,7 @@ public class Joueur {
         }
     }
 
-    // La création de demanderJoueur et verifierNomJoueur ont été réalisée en partie par ChatGPT, en particulier pour la gestion d'erreur
+    // La création de demanderJoueur et verifierNomJoueur ont été réalisée en partie par ChatGPT, en particulier pour la gestion d'exceptions
     // Permet de choisir un joueur sur lequel effectuer une action
     public static Joueur demanderJoueur(boolean passerTour, boolean removeMe) {    // Méthode pour demander le nom d'un joueur
         System.out.println();              // On revient à la ligne
@@ -174,6 +174,8 @@ public class Joueur {
     }
 
 
+
+
     public void cupiJoueur(){
         System.out.println("Qui sera touché de votre flèche cette nuit? (Veuillez rentrez 2 noms parmi la liste, un par un)");
         Jeu.afficherJoueur(false);
@@ -189,7 +191,7 @@ public class Joueur {
             System.out.println("Veuillez choisir 2 joueurs différents");
         }while (amourUn==amourDeux);
 
-        System.out.println(STR."Vous avez donc uni-e-s \{amourUn.getNom()} ainsi que \{amourDeux.getNom()}.\n");
+        System.out.println("Vous avez donc uni-e-s "+amourUn.getNom()+" ainsi que "+amourDeux.getNom()+".\n");
 
         Plateau.getGrosBG().getPerso().actionNuit(amourUn,amourDeux);
     }
@@ -210,7 +212,7 @@ public class Joueur {
             System.out.println("Très bien, aucun vol ne sera réalisé ce soir.\n");
         } else {
             Plateau.getGrosBG().getPerso().actionNuit(Plateau.getGrosBG(),cible);
-            System.out.println(STR."Vous possédez désormais ce rôle : \{cible.getPerso().getNom()}");
+            System.out.println("Vous possédez désormais ce rôle : "+cible.getPerso().getNom());
         }
     }
 
@@ -229,7 +231,7 @@ public class Joueur {
             System.out.println("Très bien, vous n'avez découvert le rôle de personne ce soir.\n");
         } else {
             Plateau.getGrosBG().getPerso().actionNuit(cible, null);
-            System.out.println(STR."\{cible.getNom()} présente ce rôle : \{cible.getPerso().getNom()}");
+            System.out.println(cible.getNom()+" présente ce rôle : "+cible.getPerso().getNom());
         }
     }
 
@@ -259,7 +261,7 @@ public class Joueur {
             System.out.println("Très bien, vous n'avez tué personne ce soir.\n");
         } else {
             Plateau.getGrosBG().getPerso().actionNuit(null, cible);
-            System.out.println(STR."\{cible.getNom()} a bien été tué ce soir.");
+            System.out.println(cible.getNom()+" a bien été tué ce soir.");
         }
     }
 
@@ -311,24 +313,24 @@ public class Joueur {
             reponse=demanderChoixSorciere();
         }
 
-        switch (demanderChoixSorciere()){
+        switch (reponse){
             case "O" :
                 if (Sorciere.getPotionVie()==0 && !Jeu.getMortsDuSoir().isEmpty()){
                 }
                 Sorciere.setChoixVieMort(1);
-                Plateau.getGrosBG().getPerso().actionNuit(Jeu.getMortsDuSoir().getFirst(), null);
+                Plateau.getGrosBG().getPerso().actionNuit(Jeu.getMortsDuSoir().get(0), null);
                 break;
             case "X" :
                 Sorciere.setChoixVieMort(2);
                 System.out.println("Qui désirez vous tuer?");
                 Jeu.afficherJoueur(true);
                 Joueur cible=demanderJoueur(false,true);
-                while (!Jeu.getMortsDuSoir().isEmpty() && cible == Jeu.getMortsDuSoir().getFirst()) {
+                while (!Jeu.getMortsDuSoir().isEmpty() && cible == Jeu.getMortsDuSoir().get(0)) {
                     System.out.println("Vous ne pouvez pas tuer un joueur déjà mort, veuillez réessayer :");
                     cible=demanderJoueur(false,true);
                 }
                 Plateau.getGrosBG().getPerso().actionNuit(cible, null);
-                System.out.println(STR."Très bien. Vous avez donc tué \{cible.getNom()}.");
+                System.out.println("Très bien. Vous avez donc tué "+cible.getNom()+".");
                 break;
             case "R" :
                 Sorciere.setChoixVieMort(0);
@@ -355,11 +357,18 @@ public class Joueur {
 
 
 
-    public void voteJoueur(){
-        // On demande au joueur de choisir une personne à élir
-        Jeu.afficherJoueur(false);
 
-        Joueur cible=demanderJoueur(false,false);
+    public void voteJoueur(){
+        // On demande au joueur de choisir une personne à élire
+        Joueur cible;
+        if (Jeu.getMaire()==null) {
+            Jeu.afficherJoueur(false);
+            cible=demanderJoueur(false,false);
+        } else {
+            Jeu.afficherJoueur(true);
+            cible=demanderJoueur(false,true);
+        }
+
 
         // Si le joueur est maire, son vote compte double
         if (Jeu.getMaire()==this){
@@ -396,7 +405,7 @@ public class Joueur {
         String mefConf = input.nextLine();
 
         while (!mefConf.equalsIgnoreCase("Confiance") && !mefConf.equalsIgnoreCase("Méfiance")) {
-            System.out.println("Erreur : Veuillez entrer le mot "+ConsoleText.RED_BOLD+"\"Confiance\""+ConsoleText.RESET+" ou "+ConsoleText.RED_BOLD+"\"Méfiance\"");
+            System.out.println("Erreur : Veuillez entrer le mot "+ConsoleText.RED_BOLD+"\"Confiance\""+ConsoleText.RESET+" ou "+ConsoleText.RED_BOLD+"\"Méfiance\""+ConsoleText.RESET);
             mefConf = input.nextLine();
         }
 

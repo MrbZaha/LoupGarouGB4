@@ -23,20 +23,10 @@ public abstract class Personnages {
     public String getNom() {
         return nom; }
 
-
-//    // Setters
-//    public static void setIdJoueur(int idJoueur) {
-//        Personnages.idJoueur = idJoueur;
-//    }
-//
-//    public static void setIdPerso(int idPerso) {
-//        Personnages.idPerso = idPerso;
-//    }
-//
-//    public static void setNom(String nom) {
-//        Personnages.nom = nom;
-//    }
-
+    // Setters
+    public void setNom(String newNom) {                      // Pour que la voyante puisse voir les rôles changés par le voleur
+        this.nom = newNom;
+    }
 
     // Fonctions
     public String IsKilled(String nomJoueur) {
@@ -50,7 +40,5 @@ public abstract class Personnages {
     public abstract void actionNuit(Joueur cible1, Joueur cible2);
 
     public abstract String revelationJ(Joueur victime);
-
-
 
 }

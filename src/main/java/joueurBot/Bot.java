@@ -225,12 +225,12 @@ public class Bot {
         switch (choix) {
             case "sauver":
                 Sorciere.setChoixVieMort(1);
-                this.joueur.getPerso().actionNuit(Jeu.getMortsDuSoir().getFirst(), null);  // Ne prend pas en compte qu'il y ait personne
-                this.setConfiance(Jeu.getMortsDuSoir().getFirst(), +10);        // Elle gagne confiance en la personne choisie par les LG
+                this.joueur.getPerso().actionNuit(Jeu.getMortsDuSoir().get(0), null);  // Ne prend pas en compte qu'il y ait personne
+                this.setConfiance(Jeu.getMortsDuSoir().get(0), +10);        // Elle gagne confiance en la personne choisie par les LG
                 break;
             case "tuer":
                 Joueur cible = choisirCible(pasConfiance);
-                while (!Jeu.getMortsDuSoir().isEmpty() && cible == Jeu.getMortsDuSoir().getFirst()) { // Si sorcière va choisir même personnage 2 fois
+                while (!Jeu.getMortsDuSoir().isEmpty() && cible == Jeu.getMortsDuSoir().get(0)) { // Si sorcière va choisir même personnage 2 fois
                     cible=Jeu.getListeJoueurs().get(random.nextInt(Jeu.getListeJoueurs().size()));    // On en choisit un au hasard
                 }
 
@@ -261,7 +261,7 @@ public class Bot {
 
         Joueur cible = choisirCible(pasConfiance);
         this.joueur.getPerso().actionJour(this.joueur, cible);        // Le chasseur entre en jeu
-        System.out.println(STR."\{this.joueur.getNom()} a emporté \{cible.getNom()} avec ellui dans la tombe!");
+        System.out.println(this.joueur.getNom()+" a emporté "+cible.getNom()+" avec ellui dans la tombe!");
         System.out.println(cible.getPerso().revelationJ(cible));
     }
 
@@ -318,8 +318,8 @@ public class Bot {
     public String messBot() {                                       // En fonction de son rôle, le bot renvoit un message particulier
         // La petite fille, la voyante, le loup et quelques autres personnages pourront parler durant un tour de parole
         // J'ai pensé à faire parler l'ex joueur mais... Il a déjà change de rôle à ce moment là
-        String phrase = new String();
-        double probaTypePhrase = random.nextDouble();
+        String phrase;
+        double probaTypePhrase;
 
         switch(this.joueur.getPerso().getIdPerso()){
             case Jeu.idLG :
@@ -345,13 +345,13 @@ public class Bot {
                     return null;
                 } else {
                     if (PetiteFille.getJoueurObserve().getIsAlive()) {    // S'il est encore vivant
-                        phrase = UsineAPhrases.getPhrase(2);     // Elle l'accuse
+                        phrase = UsineAPhrases.getPhrase(UsineAPhrases.phraseDeMefiance);     // Elle l'accuse
 
                         this.joueur.setJoueurDiscussion(PetiteFille.getJoueurObserve());
 
                         return phrase.replace("%cible%", PetiteFille.getJoueurObserve().getNom());
                     } else {                                              // Mais s'il est mort
-                        phrase = UsineAPhrases.getPhrase(0);     // Elle ne dit rien d'utile
+                        phrase = UsineAPhrases.getPhrase(UsineAPhrases.phraseAleatoire);     // Elle ne dit rien d'utile
                         return phrase;
                     }
                 }
@@ -363,7 +363,7 @@ public class Bot {
                 } else {
                     if (Voyante.getRevelation().getIsAlive()) {    // S'il est encore vivant
                         this.joueur.setJoueurDiscussion(Voyante.getRevelation());
-                        if (Jeu.getListeLG().contains(Voyante.getRevelation())) {
+                        if (Voyante.getRevelation().getPerso().getNom().equalsIgnoreCase("Loup Garou")) {
                             phrase = UsineAPhrases.getPhrase(UsineAPhrases.phraseDeMefiance);     // Elle l'accuse
                             return phrase.replace("%cible%", Voyante.getRevelation().getNom());
                         } else {
@@ -377,29 +377,26 @@ public class Bot {
                 }
 
             default :                                                         // Si c'est un joueur random
-                probaTypePhrase = random.nextDouble();
-                if (probaTypePhrase < 0.5) return null;                       // 50% de chance de se taire
+                double probaParle = random.nextDouble();
+                if (probaParle < 0.5) return null;                           // 50% chance de se taire
 
                 boolean confPasConf = random.nextBoolean();
 
-                Joueur paroleCible = choisirCible(confPasConf);               // On choisit un joueur en lequel on a ou pas confiance
+                Joueur cibleVillageois = choisirCible(confPasConf);
+                if (cibleVillageois == null) return null;
 
-                if (paroleCible == null){                                     // S'il n'y a plus personne pour qui voter
-                    return null; }
+                this.joueur.setJoueurDiscussion(cibleVillageois);
 
-                this.joueur.setJoueurDiscussion(paroleCible);
-
-                if (probaTypePhrase < 0.7) {                                  // 20% de chance de dire rien d'utile
-                phrase = UsineAPhrases.getPhrase(UsineAPhrases.phraseAleatoire);
-                return phrase.replace("%cible%", paroleCible.getNom()); }
-
-                if (confPasConf){                                            // Si on a choisi une personne en laquelle on avait confiance
+                probaTypePhrase = random.nextDouble();
+                if (probaTypePhrase < 0.7) {                                  // 70% de chance de dire n'importe quoi
+                    phrase = UsineAPhrases.getPhrase(UsineAPhrases.phraseAleatoire);
+                } else if (confPasConf) {                                     // S'il avait confiance en le villageois
                     phrase = UsineAPhrases.getPhrase(UsineAPhrases.phraseDeConfiance);
-                    return phrase.replace("%cible%", paroleCible.getNom());
-                } else {                                                     // Si on a choisi une personne en laquelle pas de confiance
+                } else {
                     phrase = UsineAPhrases.getPhrase(UsineAPhrases.phraseDeMefiance);
-                    return phrase.replace("%cible%", paroleCible.getNom());
                 }
+
+                return phrase.replace("%cible%", cibleVillageois.getNom());
         }
     }
 

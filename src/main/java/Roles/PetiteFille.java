@@ -48,17 +48,3 @@ public class PetiteFille extends Personnages{
     }
 }
 
-
-//    private static ArrayList<Joueur> listeLoupsVus;        // Sont stockés afin d'éviter les répétitions
-
-//            setListeLoupsVus(1, joueurObserve);
-
-//    public void setListeLoupsVus(int addRemove, Joueur loup){
-//        if (addRemove<0) {
-//            listeLoupsVus.remove(loup); }
-//        else {
-//            listeLoupsVus.add(loup); } }
-
-//    public ArrayList<Joueur> getListeLoupsVus() {
-//        return this.listeLoupsVus; }
-

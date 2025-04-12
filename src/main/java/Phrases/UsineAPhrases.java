@@ -1,7 +1,5 @@
 package Phrases;
 
-import DerouleJeu.Jeu;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -45,13 +43,12 @@ public class UsineAPhrases {
 
     public static String getPhrase(int confiance) {
         Random rand = new Random();
-        String source = new String();
+        String source = null;
         switch (confiance) {
-            case phraseAleatoire : source = phrasesRandom.get(rand.nextInt(phrasesRandom.size()));        // On retourne une phrase sans trop de rapport
-            case phraseDeConfiance : source = phrasesConfiance.get(rand.nextInt(phrasesConfiance.size()));  // On retourne une phrase pour augmenter la confiance
-            case phraseDeMefiance : source = phrasesMefiance.get(rand.nextInt(phrasesMefiance.size()));    // On retourne une phrase pour diminuer la confiance
+            case phraseAleatoire : source = phrasesRandom.get(rand.nextInt(phrasesRandom.size())); break;          // On retourne une phrase sans trop de rapport
+            case phraseDeConfiance : source = phrasesConfiance.get(rand.nextInt(phrasesConfiance.size())); break;  // On retourne une phrase pour augmenter la confiance
+            case phraseDeMefiance : source = phrasesMefiance.get(rand.nextInt(phrasesMefiance.size())); break;     // On retourne une phrase pour diminuer la confiance
         }
-//        List<String> source = confiance ? phrasesConfiance : phrasesMefiance;         // Debug
         return source;
     }
 }

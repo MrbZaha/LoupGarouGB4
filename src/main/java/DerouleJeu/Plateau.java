@@ -1,6 +1,7 @@
 package DerouleJeu;
 
 import Exceptions.Exceptions;
+import Phrases.ConsoleText;
 import Roles.LoupGarou;
 import Roles.Personnages;
 import joueurBot.*;
@@ -56,7 +57,7 @@ public class Plateau {
 
         Jeu.ajouterJoueur(grosBG);                                                 // On ajoute à la liste des joueurs
 
-        System.out.println(STR."Note du narrateur : Bonjour \{Plateau.nom}, vous entamerez ce rôle en début de partie : \{grosBG.getPerso().getNom()}\n");
+        System.out.println(ConsoleText.YELLOW_BOLD+"Note du narrateur : Bonjour "+Plateau.nom+", vous entamerez ce rôle en début de partie : "+grosBG.getPerso().getNom()+"\n"+ConsoleText.RESET);
 
         // On crée notre liste de robots
         while (!listePersoPossible.isEmpty()) {                                    // Tant que listePersoPossible n'est pas vide, on crée de nouveaux robots
@@ -144,7 +145,7 @@ public class Plateau {
         System.out.println("Avant tout, Pouvez vous me rappeler votre nom?");
         Plateau jeu = new Plateau();
         Exceptions.sleepJeu(2500);
-        System.out.println(STR."\nTrès bien... \"\{Plateau.nom}\"... J'imagine que vous n'êtes pas sans savoir des derniers évènements du village.");
+        System.out.println("\nTrès bien... \""+Plateau.nom+"\"... J'imagine que vous n'êtes pas sans savoir des derniers évènements du village.");
         Exceptions.sleepJeu(3000);
         System.out.println("Nous avons comme qui dirait, un petit problème de... 'Nuisibles'... ");
         Exceptions.sleepJeu(3000);

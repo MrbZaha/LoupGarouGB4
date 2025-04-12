@@ -7,11 +7,17 @@ public class Chasseur extends Personnages {
     // Avoir une variable de classe qui donne un indice à chaque personnage
     private static final int id=6;
 
+    private static Joueur cibleChasseur = null;
+
     // Constructeur prend en argument l'id du joueur
     public Chasseur(int identifiant){
         super(identifiant, id,"Chasseur");
     }
 
+    // Getter
+    public static Joueur getCibleChasseur() {
+        return cibleChasseur;
+    }
 
     // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //
     // --- --- --- --- --- --------------- .......    Fonctions    ....... --------------- --- --- --- --- --- //
@@ -22,7 +28,9 @@ public class Chasseur extends Personnages {
         // Lorsqu'il est tué, il peut emporter un autre joueur avec lui
         cible.setIsAlive(false);
         Jeu.retirerDuJeu(cible);
-        Jeu.getMortsDuSoir().add(cible);
+        // pb : on modifie boucle liste pendant boucle for, pas top
+//        Jeu.getMortsDuSoir().add(cible);
+        cibleChasseur = cible;
     }
 
     @Override

@@ -1,6 +1,8 @@
 package DerouleJeu;
 
 import Exceptions.Exceptions;
+import Main.Main;
+import Phrases.ConsoleText;
 import joueurBot.*;
 import Roles.*;
 
@@ -44,6 +46,8 @@ public class Jeu {
     private static Runnable actionDiffVol = null;                    // Stock d'une action différée pour que le voleur ne dérègle pas le jeu
 
     private static ArrayList<String> listeMessagesVillages = new ArrayList<String>();
+
+    private static int checkMortUneFois=0;
 
     // Setters
     public static void setAmoureux(Joueur[] amoureux) {
@@ -198,10 +202,9 @@ public class Jeu {
             System.out.println("Mais il ne faut pas nous relâcher, continuez à enquêter.");
             Exceptions.sleepJeu(2000);
         } else {
-            System.out.print(STR."\nNous comptons \{mortsDuSoir.size()} mort-e-s pour cette nuit : ");
+            System.out.print("\nNous comptons "+mortsDuSoir.size()+" mort-e-s pour cette nuit : ");
             for (Joueur i : mortsDuSoir){
-                System.out.print(STR."\{i.getNom()}    ");
-            }
+                System.out.print(i.getNom()+"    "); }
             System.out.println(); Exceptions.sleepJeu(4000);
         }
 
@@ -209,9 +212,9 @@ public class Jeu {
         if (mortSauve.isEmpty()){
             // On ne dit rien
         } else {
-            System.out.println(STR."\nCependant, \{mortSauve.getFirst().getNom()} a pu être sauvé ce soir!\n");
+            System.out.println("\nCependant, "+mortSauve.get(0).getNom()+" a pu être sauvé ce soir!\n");
             Exceptions.sleepJeu(2000);
-            mortsDuSoir.remove(mortSauve.getFirst());
+            mortsDuSoir.remove(mortSauve.get(0));
         }
 
         // Annoncer si un d'entres eux était amoureux
@@ -222,15 +225,9 @@ public class Jeu {
             System.out.println();
             System.out.println(mort.getPerso().revelationJ(mort));
             Exceptions.sleepJeu(1000);
+
             // Faire entrer en jeu le chasseur
             checkChasseur(mort);
-//            if(mort.getPerso().getNom().equals("Chasseur")){                         // Debug
-//                if(mort==grosBG){                                                    // Si le joueur était chasseur
-//                    mort.actionDuJoueur(mort.getPerso().getIdPerso());
-//                } else {
-//                    mort.getBotRattache().actionDuBot(mort.getPerso().getIdPerso());
-//                }
-//            }
         }
 
         // Mettre à jour les liste LG, villageois, joueurs, le maire, liste vote et confiance
@@ -246,6 +243,8 @@ public class Jeu {
         // Vérifier si une des équipes a gagné
         finDuJeu = verifFinDuJeu(); if (finDuJeu) {return;}
 
+        checkJoueurMort();
+
         if(maire!=null){
             if(!maire.getIsAlive()){
                 maire=null;
@@ -257,6 +256,9 @@ public class Jeu {
         mortSauve.clear();
 
         // Petit instant discussion
+        System.out.println("\n        // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //\n" +
+                "        // --- --- --- --- --- --------------- .......Retours du Village....... --------------- --- --- --- --- --- //\n" +
+                "        // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //\n");
 
         // D'abord tous les bots y passent
         for (Joueur bot : listeBots) {
@@ -281,9 +283,6 @@ public class Jeu {
                 System.out.println(messageJoueur.replaceAll("%[a-z]%", ""));      // Aidé par ChatGPT
             }
         }
-//        else {
-//            System.out.println("Huston nous avons un problème");            // Débug
-//        }
 
         // pour chaque phrase du type, les autres bots doivent avoir leur confiance modifiée
         for ( Joueur bot : listeBots) {
@@ -296,12 +295,12 @@ public class Jeu {
         // élire un maire s'il n'y a plus
         if (Jeu.maire==null){
             System.out.println("\nIl semble que nous manquions d'un maire pour nous aider dans nos décisions.");
-            System.out.println("Qui souhaitez vous élir?");
+            System.out.println("Qui souhaitez vous élire?");
             // Élire un maire
             Joueur votee=voteGeneral();
             maire=votee;                                 // On élit le maire
             System.out.println();
-            System.out.println(STR."Vous avez donc élu \{votee.getNom()} en tant que maire. Les péripéties peuvent reprendre.");
+            System.out.println("Vous avez donc élu "+votee.getNom()+" en tant que maire. Les péripéties peuvent reprendre.");
             Exceptions.sleepJeu(2000);
 
             // Le maire élu gagne en confiance chez le reste des gens
@@ -317,7 +316,7 @@ public class Jeu {
         Joueur votee=voteGeneral();
 
         System.out.println();
-        System.out.println(STR."Le village a voté... Et le village a choisi \{votee.getNom()}.\n");
+        System.out.println("Le village a voté... Et le village a choisi "+votee.getNom()+".\n");
         Exceptions.sleepJeu(2000);
 
         // Set isAlive en false et le retirer de la liste des joueurs, préciser son rôle pour vote de mort
@@ -326,21 +325,21 @@ public class Jeu {
 
         // Vérifier si joueur était un chasseur
         checkChasseur(votee);
-//        if (votee.getPerso().getNom().equals("Chasseur")){
-//            if(votee==grosBG){                                                    // Si le joueur était chasseur
-//                votee.actionDuJoueur(votee.getPerso().getIdPerso());
-//            } else {
-//                votee.getBotRattache().actionDuBot(votee.getPerso().getIdPerso());
-//            }
-//            retirerDuJeu(mortsDuSoir.getLast());                                  // On sort du jeu le dernier joueur, celui qui vient d'être tué
-//        }
+
         retirerDuJeu(votee);
 
         // Revérifier si une des équipes a gagné
         finDuJeu = verifFinDuJeu(); if (finDuJeu) {return;}
 
+        checkJoueurMort();
+
         // Checker si les 2 amoureux sont toujours vivants
         checkAmour();
+
+        // Si le chasseur a joué durant ce tour
+        if (Chasseur.getCibleChasseur()!=null) {                                    // Si le chasseur a joué ce soir
+            retirerDuJeu(Chasseur.getCibleChasseur());
+        }
 
         // La confiance de tous les bots les uns pour les autres descend de un
         for (Joueur bot : listeBots){
@@ -391,9 +390,11 @@ public class Jeu {
     }
 
 
+
     // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //
     // --- --- --- --- --- --------------- .......     Méthodes    ....... --------------- --- --- --- --- --- //
     // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //
+
 
 
     public static boolean verifFinDuJeu(){
@@ -453,15 +454,16 @@ public class Jeu {
             Random rand = new Random();
             Joueur votee = joueursMaxVotes.get(rand.nextInt(joueursMaxVotes.size()));
             System.out.println();
-            System.out.print("Un tirage au sort est lancé pour connaître le candidat du vote.");
+            System.out.print("Un tirage au sort est lancé pour connaître le candidat du vote");
             System.out.print("."); Exceptions.sleepJeu(800);
             System.out.print("."); Exceptions.sleepJeu(800);
             System.out.print("."); Exceptions.sleepJeu(1200);
-            System.out.println(STR."Le sort a voté pour \{votee.getNom()} !");
+            System.out.println(" Le sort a voté pour "+votee.getNom()+" !");
+            System.out.print("."); Exceptions.sleepJeu(1200);
             return votee;
         }
 
-        // Faire un petit jeu pour choisir, au hasard ou bien refaire un vote
+        // Faire un petit jeu pour choisir, au hasard ou bien refaire un vote,
 
     }
 
@@ -473,7 +475,7 @@ public class Jeu {
 
                     if (partenaire.getIsAlive()) {                                     // Si le-la partenaire est encore vivant-e
                         partenaire.setIsAlive(false);
-                        Jeu.setMortsDuSoir(partenaire);                                // On l'ajoute à la liste des mort-e-s dans la soirée
+                        // Jeu.setMortsDuSoir(partenaire);                                // On l'ajoute à la liste des mort-e-s dans la soirée
                         System.out.println(partenaire.getNom()+", partenaire de "+amour.getNom()+" a décidé de le-la rejoindre dans la mort");
                         System.out.println(partenaire.getPerso().revelationJ(partenaire));
 
@@ -498,7 +500,41 @@ public class Jeu {
             } else {
                 votee.getBotRattache().actionDuBot(votee.getPerso().getIdPerso());
             }
-            retirerDuJeu(mortsDuSoir.getLast());                                      // On sort du jeu le dernier joueur, celui qui vient d'être tué
+            // pb : on modifie morts du soir pendant une boule for, le jeu aime pas
+//            retirerDuJeu(mortsDuSoir.getLast());                                      // On sort du jeu le dernier joueur, celui qui vient d'être tué
+        }
+    }
+
+    //Regarde si le joueur est mort et lui propose de recommencer
+    public static void checkJoueurMort() {
+        if (!grosBG.getIsAlive() && checkMortUneFois==0) {
+            System.out.println(ConsoleText.YELLOW_BOLD+"\nIl semble que soyiez définitivement éliminé du jeu. Souhaitez vous "+ConsoleText.RED_BOLD+"continuer"+ConsoleText.YELLOW_BOLD+" ou "+ConsoleText.RED_BOLD+"recommencer"+ConsoleText.YELLOW_BOLD+" une autre partie?");
+            String rep = input.nextLine();
+            while (!rep.equalsIgnoreCase("continuer") && !rep.equalsIgnoreCase("recommencer")) {
+                System.out.println(ConsoleText.YELLOW_BOLD+"Veuillez rentrer une des valeurs possibles.");
+                rep = input.nextLine();
+            }
+
+            if (rep.equalsIgnoreCase("recommencer")) {
+                System.out.println("Très bien, le jeu va recommencer."+ConsoleText.RESET);
+                Exceptions.sleepJeu(1500);
+
+                // Clear le terminal, et les éléments du jeu à réinitialiser.
+                listeJoueurs.clear();
+                listeBots.clear();
+                listeLG.clear();
+                listeVillageois.clear();
+                mortsDuSoir.clear();
+                mortSauve.clear();
+                rolesDejaJoues.clear();
+                vote.clear();
+
+                // reset de tout ce qu’il faut ici si besoin
+                Main.lancerJeu();                                                         // On appelle une nouvelle partie
+                return;
+            }
+
+            checkMortUneFois++;                                                           // Comme ça on ne demande qu'une fois
         }
     }
 
@@ -509,6 +545,24 @@ public class Jeu {
         listeBots.remove(mort);
         vote.remove(mort);
     }
-
-    // Tuez moi
 }
+
+
+
+//            if(mort.getPerso().getNom().equals("Chasseur")){                         // Debug
+//                if(mort==grosBG){                                                    // Si le joueur était chasseur
+//                    mort.actionDuJoueur(mort.getPerso().getIdPerso());
+//                } else {
+//                    mort.getBotRattache().actionDuBot(mort.getPerso().getIdPerso());
+//                }
+//            }
+
+
+//        if (votee.getPerso().getNom().equals("Chasseur")){
+//            if(votee==grosBG){                                                    // Si le joueur était chasseur
+//                votee.actionDuJoueur(votee.getPerso().getIdPerso());
+//            } else {
+//                votee.getBotRattache().actionDuBot(votee.getPerso().getIdPerso());
+//            }
+//            retirerDuJeu(mortsDuSoir.getLast());                                  // On sort du jeu le dernier joueur, celui qui vient d'être tué
+//        }

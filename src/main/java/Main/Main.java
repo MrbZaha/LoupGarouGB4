@@ -7,12 +7,16 @@ import Roles.*;
 
 public class Main {
 
-    private static int tour=1;
-    private static int tourSurvecu=1;
+    private static int tour;
+    private static int tourSurvecu;
 
-    // Lancement du jeu
-    public void main(String[] args){
-        // Combien de joueurs pour la partie?
+    public static void main(String[] args) {
+        lancerJeu();
+    }
+
+    public static void lancerJeu() {
+        tour = 1;
+        tourSurvecu = 1;
 
         Plateau.initialisationJeu();
 
@@ -22,38 +26,38 @@ public class Main {
         Jeu.tourPreliminaire();
 
         // Boucle principale du jeu
-        while (!Jeu.getVictoireVillageois() && !Jeu.getVictoireLoup()){
-            System.out.println("        // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //\n" +
-                    STR."        // --- --- --- --- --- --------------- .......      Nuit \{tour}     ....... --------------- --- --- --- --- --- //\n" +
+        while (!Jeu.getVictoireVillageois() && !Jeu.getVictoireLoup()) {
+            System.out.println("\n        // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //\n" +
+                    "        // --- --- --- --- --- --------------- .......      Nuit "+tour+"     ....... --------------- --- --- --- --- --- //\n" +
                     "        // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //");
 
-                // Faire le tour de nuit
             Jeu.tourDeJeuNuit();
 
             System.out.println("        // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //\n" +
-                    STR."        // --- --- --- --- --- --------------- .......      Jour \{tour}     ....... --------------- --- --- --- --- --- //\n" +
+                    "        // --- --- --- --- --- --------------- .......      Jour "+tour+"     ....... --------------- --- --- --- --- --- //\n" +
                     "        // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //");
 
-            if(Plateau.getGrosBG().getIsAlive()) {
-                tourSurvecu++;                                  // Le nombre de tours qu'iel a survécu incrémente
+            if (Plateau.getGrosBG().getIsAlive()) {
+                tourSurvecu++;
             }
 
-            // Faire le tour de jour
             Jeu.tourDeJeuJour();
-
             tour++;
         }
 
+        afficherFin();
+    }
+
+    public static void afficherFin() {
         System.out.println("\n        // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //\n" +
-                STR."        // --- --- --- --- --- --------------- .......  Fin du Jeu.  ....... --------------- --- --- --- --- --- //\n" +
+                "        // --- --- --- --- --- --------------- .......  Fin du Jeu.  ....... --------------- --- --- --- --- --- //\n" +
                 "        // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //");
 
         Exceptions.sleepJeu(3000);
 
-        // Si les villageois gagnent
-        if (Jeu.getVictoireVillageois()){
+        if (Jeu.getVictoireVillageois()) {
             System.out.println("\nLes villageois ont gagné!");
-            if(Plateau.getGrosBG().getPerso().getNom().equals("Loup Garou")){
+            if (Plateau.getGrosBG().getPerso().getNom().equals("Loup Garou")) {
                 System.out.println("Dommage pour vous. :)");
             } else {
                 System.out.println("Bravo, vous avez réussi à éliminer tous les Loups Garous!");
@@ -61,17 +65,16 @@ public class Main {
             }
         }
 
-        // Si les LG gagnent
-        if (Jeu.getVictoireLoup()){
+        if (Jeu.getVictoireLoup()) {
             System.out.println("\nLes Loups Garous ont gagné!");
-            if(Plateau.getGrosBG().getPerso().getNom().equals("Loup Garou")){
+            if (Plateau.getGrosBG().getPerso().getNom().equals("Loup Garou")) {
                 System.out.println("Bravo à vous. :)");
             } else {
                 System.out.println("Dommage pour le village, ils n'ont pas su éliminer tous les Loups Garous...");
             }
         }
 
-        System.out.println(STR."\n Cette partie a duré \{tour} jour(s).");
-        System.out.println(STR."\n Vous avez survécu \{tourSurvecu} jour(s).");
+        System.out.println("\n Cette partie a duré "+tour+" jour(s).");
+        System.out.println("\n Vous avez survécu "+tourSurvecu+" jour(s).");
     }
 }
