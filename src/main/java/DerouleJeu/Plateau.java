@@ -2,15 +2,13 @@ package DerouleJeu;
 
 import Exceptions.Exceptions;
 import Phrases.ConsoleText;
-import Roles.LoupGarou;
-import Roles.Personnages;
+import Phrases.Affichage;
 import joueurBot.*;
 
 import javax.sound.midi.Soundbank;
 import java.util.*;
 
 public class Plateau {
-    // Va lancer la boucle principale du jeu
     // Initialise tous les joueurs et lance les différents moments de jeu
 
     public static final int idCUPIDON=0;
@@ -29,12 +27,14 @@ public class Plateau {
     private static Joueur grosBG;
 
     private static final ArrayList<String> listeNomsJoueurs = new ArrayList<>(
-            Arrays.asList("Ewan", "Axel", "Alexis", "Zahir", "Achille", "Nina", "Izel", "Lélia", "Nhu Vy", "Lucille", "Kevin", "Solène",
-                    "Habiba", "Driss", "Adam", "Nour", "Julie", "Salome", "Juliette", "Anaïs", "Maxence", "Mathis", "Dorian", "Emma")
+            Arrays.asList("Ewan", "Axel", "Alexis", "Zahir", "Dina", "Achille", "Nina", "Izel", "Lélia", "Nhu Vy", "Lucille", "Kevin", "Solène",
+                    "Habiba", "Driss", "Adam", "Nour", "Julie", "Salomé", "Juliette", "Anaïs", "Maxence", "Mathis", "Dorian", "Emma")
     );
 
-    Scanner input = new Scanner(System.in);
+    private static Scanner input = new Scanner(System.in);
     private static String nom;
+
+    private static boolean secretEnding = false;                                         // Une fin secrète???
 
 
     // Constructeur initalisant les différents joueurs
@@ -45,9 +45,13 @@ public class Plateau {
         int assignement=random.nextInt(listePersoPossible.size());
         int assignementNom;
 
+        System.out.println();
         System.out.print("Veuillez rentrer votre nom : ");
-        Plateau.setNom(input.nextLine());
-
+        nom = input.nextLine();
+        while (nom.equalsIgnoreCase("")) {
+            System.out.println("Ce nom n'est pas possible, veuillez réessayer.");
+            nom = input.nextLine();
+        }
 
         grosBG = new Joueur(nom, listePersoPossible.get(assignement), null);  // Initialisation du rôle du joueur
         this.listePersoPossible.remove(assignement);
@@ -57,7 +61,7 @@ public class Plateau {
 
         Jeu.ajouterJoueur(grosBG);                                                 // On ajoute à la liste des joueurs
 
-        System.out.println(ConsoleText.YELLOW_BOLD+"Note du narrateur : Bonjour "+Plateau.nom+", vous entamerez ce rôle en début de partie : "+grosBG.getPerso().getNom()+"\n"+ConsoleText.RESET);
+        Affichage.aff(ConsoleText.YELLOW_BOLD+"Note du narrateur : Bonjour "+Plateau.nom+", vous entamerez ce rôle en début de partie : "+grosBG.getPerso().getNom()+ConsoleText.RESET);
 
         // On crée notre liste de robots
         while (!listePersoPossible.isEmpty()) {                                    // Tant que listePersoPossible n'est pas vide, on crée de nouveaux robots
@@ -83,10 +87,6 @@ public class Plateau {
 
             numBot++;
         }
-
-//        for (Joueur i: Jeu.getListeJoueurs()){                                            // Debug
-//            System.out.println("Joueur : "+i.getNom()+" idRole : "+i.getPerso().getIdPerso() +" rôle : "+i.getPerso());
-//        }
     }
 
 
@@ -97,21 +97,17 @@ public class Plateau {
     public static String getNom() {
         return nom; }
 
-    public static ArrayList<Integer> getListePersoPossible(){
-        return Plateau.listePersoPossible; }
-
-    public static Joueur getGrosBG(){
+    public static Joueur getGrosBG() {
         return Plateau.grosBG;
     }
 
+    public static boolean getSecretEnding() {
+        return secretEnding; }
 
 
     // Setters
     public static void setNbJoueur(int nbJoueur) {
         Plateau.nbJoueur = nbJoueur;}
-
-    public static void setNom(String nom) {
-        Plateau.nom = nom; }
 
     public void setListePersoPossible(int nombreJoueur) {
         if (nombreJoueur==9){                           // Si on a 9 joueurs
@@ -133,35 +129,56 @@ public class Plateau {
     }
 
 
-
-
-
-
+    // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //
+    // --- --- --- --- --- --------------- .......    Fonctions    ....... --------------- --- --- --- --- --- //
+    // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //
 
 
     public static void initialisationJeu(){
-        System.out.println("\nBien le bonjour, nouvel habitant de Thiercelieux. Nous ne pensions pas vous voir de sitôt.");
-        Exceptions.sleepJeu(2000);
-        System.out.println("Avant tout, Pouvez vous me rappeler votre nom?");
+        Affichage.aff("Bien le bonjour, nouvel habitant de Thiercelieux. Nous ne pensions pas vous voir de sitôt.");
+//        Affichage.attendreTouche();
+//        Affichage.afficherTriangleAttente();
+        Affichage.aff("Avant tout, Pouvez vous me rappeler votre nom?");
+//        System.out.println("Avant tout, Pouvez vous me rappeler votre nom?");
         Plateau jeu = new Plateau();
-        Exceptions.sleepJeu(2500);
-        System.out.println("\nTrès bien... \""+Plateau.nom+"\"... J'imagine que vous n'êtes pas sans savoir des derniers évènements du village.");
-        Exceptions.sleepJeu(3000);
-        System.out.println("Nous avons comme qui dirait, un petit problème de... 'Nuisibles'... ");
-        Exceptions.sleepJeu(3000);
-        System.out.println("Il semblerait que quelques Loups-Garous se soient infiltrés dans le village, et... Bon je ne vous ferai pas un dessin.");
-        Exceptions.sleepJeu(3000);
-        System.out.println("... Comment? Vous ne pensiez pas que le loyer seraient si bas sans raison, non?");
-        // Laisser la personne poser une réponse, un oui ou un non et répondre en conséquence
+//        Exceptions.sleepJeu(2500);
+        Affichage.aff("Très bien... \""+Plateau.nom+"\"... J'imagine que vous n'êtes pas sans savoir des derniers évènements du village.");
+//        System.out.println("\nTrès bien... \""+Plateau.nom+"\"... J'imagine que vous n'êtes pas sans savoir des derniers évènements du village.");
+//        Exceptions.sleepJeu(3000);
+        Affichage.aff("Nous avons comme qui dirait, un petit problème de... 'Nuisibles'... ");
+//        System.out.println("Nous avons comme qui dirait, un petit problème de... 'Nuisibles'... ");
+//        Exceptions.sleepJeu(3000);
+        Affichage.aff("Il semblerait que quelques Loups-Garous se soient infiltrés dans le village, et... Bon je ne vous ferai pas un dessin.");
+//        System.out.println("Il semblerait que quelques Loups-Garous se soient infiltrés dans le village, et... Bon je ne vous ferai pas un dessin.");
+//        Exceptions.sleepJeu(3000);
+        Affichage.aff("... Comment? Vous ne pensiez pas que le loyer seraient si bas sans raison, non?");
+//        System.out.println("... Comment? Vous ne pensiez pas que le loyer seraient si bas sans raison, non?");
 
-        System.out.println("Bon. Il n'empêche que nous allons devoir nous serrer les coudes sur les prochaines semaines!");
-        Exceptions.sleepJeu(3000);
-        System.out.println("Après tout, nous n'avons tous qu'un but : survivre.");
-        Exceptions.sleepJeu(3000);
-        System.out.println("Moi? Oh mais je ne suis qu'une simple villageoise.");
-        Exceptions.sleepJeu(3000);
-        System.out.println("Il commence à se faire tard, vous devriez rentrer pour votre propre sécurité. Bonne nuit, et bonne chance!\n");
-        Exceptions.sleepJeu(3000);
+        // Laisser la personne poser une réponse, un oui ou un non et répondre en conséquence
+        System.out.print("                    "); Exceptions.sleepJeu(100);
+        Affichage.affSansAttente("\"bah si.\"");                                  // On laisse un petit temps avant d'avoir les lettres affichées avec son
+        Exceptions.sleepJeu(1000); System.out.print("                    ");      // C'est pour l'effet comique.
+        Affichage.affSansAttente("\"non tkt\"");
+        System.out.println();
+
+        String reponse = input.nextLine();
+        if (reponse.equalsIgnoreCase("bah si.") || reponse.equalsIgnoreCase("oui") || reponse.equalsIgnoreCase("si")) {
+            secretEnding = true;
+            boolean finDuJeu = Jeu.verifFinDuJeu(); if (finDuJeu) return;
+        }
+
+        Affichage.aff("Bon. Il n'empêche que nous allons devoir nous serrer les coudes sur les prochaines semaines!");
+//        System.out.println("Bon. Il n'empêche que nous allons devoir nous serrer les coudes sur les prochaines semaines!");
+//        Exceptions.sleepJeu(3000);
+        Affichage.aff("Après tout, nous n'avons tous qu'un but : survivre.");
+//        System.out.println("Après tout, nous n'avons tous qu'un but : survivre.");
+//        Exceptions.sleepJeu(3000);
+        Affichage.aff("Moi? Oh mais je ne suis qu'une simple villageoise.");
+//        System.out.println("Moi? Oh mais je ne suis qu'une simple villageoise.");
+//        Exceptions.sleepJeu(3000);
+        Affichage.aff("Il commence à se faire tard, vous devriez rentrer pour votre propre sécurité. Bonne nuit, et bonne chance!\n");
+//        System.out.println("Il commence à se faire tard, vous devriez rentrer pour votre propre sécurité. Bonne nuit, et bonne chance!\n");
+//        Exceptions.sleepJeu(3000);
     }
 
 

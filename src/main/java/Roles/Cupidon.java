@@ -22,11 +22,8 @@ public class Cupidon extends Personnages{
     public void actionNuit(Joueur cible1, Joueur cible2) {
         // Décide des amoureux pour la partie, ne peut le faire qu'au premier tour, est forcément en vie
         Jeu.setAmoureux(new Joueur[]{cible1, cible2});
-//        for (Joueur amour:Jeu.getAmoureux()){                           // Debug
-//            System.out.println(amour.getNom());
-//        }
-
-
+        cible1.setIsLove(true);
+        cible2.setIsLove(true);
     }
 
     @Override
@@ -34,7 +31,3 @@ public class Cupidon extends Personnages{
         return victime.getNom()+" était le Cupidon!";
     }
 }
-
-//    // Getters
-//    public int getId(){
-//        return this.id;}

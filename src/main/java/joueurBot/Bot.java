@@ -20,7 +20,7 @@ public class Bot {
     private final boolean ontConfiance = true;
     private final boolean pasConfiance = false;
 
-    // Constructeur
+    // Constructeur, sert surtout à créer l'objet Joueur
     public Bot() {
         }
 
@@ -51,13 +51,13 @@ public class Bot {
 
     // On initialise les niveaux de confiance de l'entité
     // Si la confiance est à 0, l'entité tentera par tous les moyens de vous tuer
-    // Si la confiance est à 10, l'entité vous laissera tranquille
+    // Si la confiance est à 10, l'entité vous laissera tranquille et votera pour vous en tant que maire
     // À la fin de chaque tour, la confiance pour chaque personnage diminue de 1 (si possible)
 
     public void initialiserConfiance() {
         for (Joueur parcoursJ : Jeu.getListeJoueurs()) {
             if (parcoursJ.getBotRattache() != this) {
-                int conf = random.nextInt(3)+4;                   // La confiance est aléatoirement comprise entre 3 et 7 entres eux
+                int conf = random.nextInt(4)+5;                   // La confiance est aléatoirement comprise entre 3 et 7 entres eux
                 confiance.put(parcoursJ, conf);    // Valeur neutre
             }
         }
@@ -303,7 +303,12 @@ public class Bot {
                 Joueur j = entry.getKey();
                 int confianceJ = entry.getValue();
 
-                if (j.getIsAlive() && confianceJ < confianceMin) {  // Choisi le joueur à la plus petite confiance
+                if (this.joueur.getIsLove()) {
+                    if (j.getIsAlive() && confianceJ < confianceMin && !j.getIsLove()) {  // Choisi le joueur à la plus petite confiance qui n'est pas l'amoureux
+                        confianceMin = confianceJ;
+                        plusMoinsFiable = j;
+                    }
+                } else if (j.getIsAlive() && confianceJ < confianceMin) {  // Choisi le joueur à la plus petite confiance
                     confianceMin = confianceJ;
                     plusMoinsFiable = j;
                 }

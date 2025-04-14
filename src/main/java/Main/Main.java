@@ -2,8 +2,12 @@ package Main;
 
 import DerouleJeu.*;
 import Exceptions.Exceptions;
+import Phrases.Affichage;
+import Phrases.ConsoleText;
 import joueurBot.*;
 import Roles.*;
+
+// La structure de cette classe a été revue à l'aide de ChatGPT pour rendre le lancement d'un nouveau jeu plus propre
 
 public class Main {
 
@@ -20,7 +24,11 @@ public class Main {
 
         Plateau.initialisationJeu();
 
-        System.out.println("        // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //\n" +
+        if (Plateau.getSecretEnding()) {
+            afficherFin(); return;
+        }
+
+        System.out.println("\n        // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //\n" +
                 "        // --- --- --- --- --- --------------- .......    Crépuscule   ....... --------------- --- --- --- --- --- //\n" +
                 "        // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //");
         Jeu.tourPreliminaire();
@@ -42,6 +50,7 @@ public class Main {
             }
 
             Jeu.tourDeJeuJour();
+
             tour++;
         }
 
@@ -53,7 +62,7 @@ public class Main {
                 "        // --- --- --- --- --- --------------- .......  Fin du Jeu.  ....... --------------- --- --- --- --- --- //\n" +
                 "        // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //");
 
-        Exceptions.sleepJeu(3000);
+        Exceptions.sleepJeu(2000);
 
         if (Jeu.getVictoireVillageois()) {
             System.out.println("\nLes villageois ont gagné!");
@@ -72,6 +81,49 @@ public class Main {
             } else {
                 System.out.println("Dommage pour le village, ils n'ont pas su éliminer tous les Loups Garous...");
             }
+        }
+
+        if (Plateau.getSecretEnding()) {                                        // Si on a lancé la SecretEnding
+            Affichage.aff("Ah. Bon, eh bien. Um. D'accord, ");
+            System.out.println("\n");
+            System.out.println("                                                                                                    \n" +
+                    "                                                                                                    \n" +
+                    "                                                                                                    \n" +
+                    "                                                                                                    \n" +
+                    "                      @@@@@@                                                                        \n" +
+                    "        @@@@@@@@@@@@@@@@@@@@@                                           @@@@@@@@@@@@@               \n" +
+                    "      @@@@@@@@@@@@@@@@@@  @@@@@@@@@                                @@@@@@@@@@@@@@@@@@@@@@@@@@@      \n" +
+                    "      @@@   @@@@    @ @     @@@@@@@@                             @@@@@@@@    @ @    @@@@@@@@@@      \n" +
+                    "      @@      @@       @    @ @  @@@@                           @@@@         @ @    @@ @    @@@     \n" +
+                    "     @@@             @ @           @@                          @@@                    @    @@@@     \n" +
+                    "   @@@@@             @ @        @@ @@                          @@           @ @     @@      @@@@@   \n" +
+                    "   @@@@                 @  @@@ @@ @@@@                         @@@ @@ @ @   @ @            @@@@@@@  \n" +
+                    "   @@        @@@@@@@ @@@@@@@ @   @  @@                        @@@ @  @@@@@ @@@@  @@@           @@@  \n" +
+                    "   @@@  @@@@@@    @@ @@  @  @@ @@   @@                        @@@  @     @@@@@@@@@@@@@@@@@     @@@  \n" +
+                    "   @@@     @@@@@@@@  @@@@@@@@       @@                        @@     @@@@@  @@@  @@@ @@@@@@   @@@   \n" +
+                    "    @@@  @@@@@@   @@  @@@@          @@                        @@         @@@@@@@@@@@@@@@@@@  @@@@   \n" +
+                    "    @@@@   @@@@                     @@                        @@@                    @@@@@   @@@    \n" +
+                    "     @@@@@                         @@@                        @@@                          @@@@@    \n" +
+                    "      @@@@@@@@                    @@@                          @@@                     @@@@@@@@     \n" +
+                    "        @@@@@@@@@@@     @@@@     @@@@                          @@@@     @           @@@@@@@@@@      \n" +
+                    "           @@@@@@@@@@@@@@        @@@@@                         @@@@      @@@@@@@@@@@@@@@@@@         \n" +
+                    "             @@@@@      @@@@     @@@@@@@@@@@@@@@@@@@@@        @@@@@ @          @@@@@@@@@            \n" +
+                    "              @@@@@@   @     @ @    @@@@@@@  @@@@  @@@@@@@@@@@@@@@@        @@@@@@@@  @              \n" +
+                    "              @@@         @         @@@@ @    @ @ @@ @@@@@@@@@@@    @@  @@     @@@@@@@              \n" +
+                    "              @@@@@@@@@@@@  @       @@@ @@@  @@@@  @@@@@@@@@  @         @ @@    @@@@@@              \n" +
+                    "               @  @@     @  @         @@@@@@@@@@@@@@@@@@@@@@@ @@        @ @     @@  @@              \n" +
+                    "               @@ @@@    @  @       @@@@                   @@@@@       @  @     @@  @@              \n" +
+                    "               @@  @@@       @      @@@                      @@@    @@@@ @@    @@@ @@               \n" +
+                    "                @@@@@@     @@       @@@                       @@               @@  @@               \n" +
+                    "                @@@@@@              @@@@                     @@@    @@@        @@@@@                \n" +
+                    "                   @@@               @@@                     @@@               @@@                  \n" +
+                    "                   @@@@@@@@@@@@@@@@@@@@@                    @@@@@@@@@@@@@@@@@@@@@@                  \n" +
+                    "                   @@@@@@@@@@@@@@@@@@@@@                     @@@@@@@@@@@@@@@@@@@@                   \n" +
+                    "                                                                                                    \n" +
+                    "                                                                                                    \n" +
+                    "                                                                                                    ");
+            Affichage.affSansAttente("\nVous êtes libre. Heureux-se, même.");
+            Affichage.aff(ConsoleText.WHITE_BOLD+"\n --- --- Fin secrète : Vous avez pris une autre voie. --- --- "+ConsoleText.RESET);
         }
 
         System.out.println("\n Cette partie a duré "+tour+" jour(s).");

@@ -32,7 +32,7 @@ public class UsineAPhrases {
             "%r%J'en ai juste marre de toute cette situation...",
             "%r%Les Loups Garous n'existent pas de toute façon, vous êtes tous fous.",
             "%r%Je suis en train de craquer.",
-            "%r%Je connais une bonne Shaman qui pourrait repousser les énergies négatives accumulées dans ce village!\nLaissez lui juste 1 semaine, elle est occupée...",
+            "%r%Je connais une bonne Shaman qui pourrait repousser les énergies négatives accumulées dans ce village!\n    Laissez lui juste 1 semaine, elle est occupée...",
             "%r%Les gars je suis vraiment paumé, quelqu'un peut me faire un topo?",
             "%r%Vous pouvez répéter?",
             "%r%Les temps sont durs mais nous devons rester uni-e-s! J'ai fait un gâteau pour mettre un peu de baume à nos coeurs.",

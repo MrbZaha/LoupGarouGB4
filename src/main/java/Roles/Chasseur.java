@@ -28,8 +28,6 @@ public class Chasseur extends Personnages {
         // Lorsqu'il est tué, il peut emporter un autre joueur avec lui
         cible.setIsAlive(false);
         Jeu.retirerDuJeu(cible);
-        // pb : on modifie boucle liste pendant boucle for, pas top
-//        Jeu.getMortsDuSoir().add(cible);
         cibleChasseur = cible;
     }
 

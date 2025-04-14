@@ -12,11 +12,12 @@ import java.util.Scanner;
 
 public class Joueur {
     private String nom;
-    private boolean isAlive=true;
+    private boolean isAlive = true;
+    private boolean isLove = false;
 
-    private static Scanner input=new Scanner(System.in);
+    private static Scanner input = new Scanner(System.in);
 
-    private static int nbJoueur=0;     // Permet de définir l'identifiant de chaque joueur
+    private static int nbJoueur = 0;     // Permet de définir l'identifiant de chaque joueur
     private int idJoueur;              // Le joueur aura un identifiant, aide pour l'établissement des confiances des bots
                                        // Le vrai joueur aura toujours l'indice 0
 
@@ -63,6 +64,10 @@ public class Joueur {
     public void setJoueurDiscussion(Joueur joueurDiscussion) {
         this.joueurDiscussion = joueurDiscussion; }
 
+    public void setIsLove(boolean amour) {
+        this.isLove=amour;
+    }
+
 
 
     // Getters
@@ -86,6 +91,10 @@ public class Joueur {
 
     public Joueur getJoueurDiscussion() {
         return joueurDiscussion;
+    }
+
+    public boolean getIsLove() {
+        return this.isLove;
     }
 
 
@@ -114,7 +123,7 @@ public class Joueur {
             try{
                 String choixNom=input.nextLine().trim();
 
-                if (passerTour && choixNom.equalsIgnoreCase("Personne")) {
+                if (passerTour && choixNom.equalsIgnoreCase(ConsoleText.CYAN_BOLD+"Personne"+ConsoleText.RESET)) {
                     System.out.println("Vous avez choisi de ne pas agir ce tour.");
                     return null;
                 }
@@ -186,10 +195,11 @@ public class Joueur {
         Joueur amourUn = demanderJoueur(false, false);
         System.out.println();
         System.out.print("Second-e amoureux-euse : ");
-        Joueur amourDeux;
-        do{amourDeux = demanderJoueur(false, false);
+        Joueur amourDeux = demanderJoueur(false, false);
+        while (amourUn == amourDeux) {
+            amourDeux = demanderJoueur(false, false);
             System.out.println("Veuillez choisir 2 joueurs différents");
-        }while (amourUn==amourDeux);
+        }
 
         System.out.println("Vous avez donc uni-e-s "+amourUn.getNom()+" ainsi que "+amourDeux.getNom()+".\n");
 
@@ -205,14 +215,14 @@ public class Joueur {
         System.out.println("\nLe Voleur se réveille.");
         System.out.println("Avec qui souhaitez-vous échanger votre rôle?");
         Jeu.afficherJoueur(true);
-        System.out.print("Personne ||");
+        System.out.print(ConsoleText.CYAN_BOLD+"Personne ||"+ConsoleText.RESET);
 
         Joueur cible = demanderJoueur(true, true);
         if (cible==null){
             System.out.println("Très bien, aucun vol ne sera réalisé ce soir.\n");
         } else {
             Plateau.getGrosBG().getPerso().actionNuit(Plateau.getGrosBG(),cible);
-            System.out.println("Vous possédez désormais ce rôle : "+cible.getPerso().getNom());
+            System.out.println("Au lever de soleil, vous possèderez ce rôle : "+cible.getPerso().getNom());
         }
     }
 
@@ -224,7 +234,7 @@ public class Joueur {
         System.out.println("\nLa Voyante se réveille.");
         System.out.println("De quel joueur souhaitez vous observer le rôle ce soir?");
         Jeu.afficherJoueur(true);
-        System.out.print("Personne ||");
+        System.out.print(ConsoleText.CYAN_BOLD+"Personne"+ConsoleText.RESET+" ||");
 
         Joueur cible = demanderJoueur(true, true);
         if (cible==null){
@@ -248,14 +258,14 @@ public class Joueur {
         System.out.println();
         System.out.println("Quel joueur souhaitez-vous tuer ce soir?");
         Jeu.afficherJoueur(true);
-        System.out.print("Personne ||");
+        System.out.print(ConsoleText.CYAN_BOLD+"Personne"+ConsoleText.RESET+" ||");
 
         Joueur cible = demanderJoueur(true, true);
         while (cible != null && Jeu.getListeLG().contains(cible)) {                      // Tant que la cible est un autre lg
-            System.out.println("Vous ne pouvez pas attaquer un autre loup-garou!");
-            System.out.print("Veuillez choisir une nouvelle cible.");
+            System.out.println("Vous ne pouvez pas attaquer un autre loup-garou! Veuillez choisir une nouvelle cible.");
             cible = demanderJoueur(true, true);
         }
+        checkSiAmoureux(cible);
 
         if (cible==null){
             System.out.println("Très bien, vous n'avez tué personne ce soir.\n");
@@ -346,7 +356,7 @@ public class Joueur {
         if (!this.isAlive){
             System.out.println("\nQui souhaitez vous emporter avec vous?");
             Jeu.afficherJoueur(true);
-            System.out.print("Personne ||");
+            System.out.print(ConsoleText.CYAN_BOLD+"Personne"+ConsoleText.RESET+" ||");
 
             Joueur cible=demanderJoueur(false,true);
             System.out.println("\n"+Plateau.getGrosBG().getNom()+" a décidé de tuer "+cible.getNom());
@@ -367,6 +377,13 @@ public class Joueur {
         } else {
             Jeu.afficherJoueur(true);
             cible=demanderJoueur(false,true);
+            checkSiAmoureux(cible);
+//            if (this.isLove) {                                                    // Si le joueur est amoureux
+//                while (cible.getIsLove()) {
+//                    System.out.println("Vous ne pouvez pas agir contre votre promis-e, veuillez choisir quelqu'un d'autre.");
+//                    cible=demanderJoueur(false,true);
+//                }
+//            }
         }
 
 
@@ -401,22 +418,32 @@ public class Joueur {
         joueurDiscussion = demanderJoueur(false, true);
 
         // Si la personne veut dire qu'elle lui fait confiance ou pas
-        System.out.println("Voulez vous préciser votre "+ConsoleText.RED_BOLD+"\"Confiance\""+ConsoleText.RESET+" ou votre "+ConsoleText.RED_BOLD+"\"Méfiance\""+ConsoleText.RESET+" pour cette personne?");
+        System.out.println("Voulez vous préciser votre "+ConsoleText.BLUE_BOLD+"\"Confiance\""+ConsoleText.RESET+" ou votre "+ConsoleText.BLUE_BOLD+"\"Méfiance\""+ConsoleText.RESET+" pour cette personne?");
         String mefConf = input.nextLine();
 
         while (!mefConf.equalsIgnoreCase("Confiance") && !mefConf.equalsIgnoreCase("Méfiance")) {
-            System.out.println("Erreur : Veuillez entrer le mot "+ConsoleText.RED_BOLD+"\"Confiance\""+ConsoleText.RESET+" ou "+ConsoleText.RED_BOLD+"\"Méfiance\""+ConsoleText.RESET);
+            System.out.println("Erreur : Veuillez entrer le mot "+ConsoleText.BLUE_BOLD+"\"Confiance\""+ConsoleText.RESET+" ou "+ConsoleText.BLUE_BOLD+"\"Méfiance\""+ConsoleText.RESET);
             mefConf = input.nextLine();
         }
 
         if (mefConf.equalsIgnoreCase("Confiance")){
-            return "%c%"+this.getNom()+" : Je fais confiance à "+joueurDiscussion.getNom();
+            return ConsoleText.BLUE_BOLD+"%c%"+this.getNom()+ConsoleText.RESET+" : Je fais confiance à "+joueurDiscussion.getNom();
         } else if (mefConf.equalsIgnoreCase("Méfiance")) {
-            return "%m%"+this.getNom()+" : Je ne fais pas confiance à "+joueurDiscussion.getNom();
+            return ConsoleText.BLUE_BOLD+"%m%"+this.getNom()+ConsoleText.RESET+" : Je ne fais pas confiance à "+joueurDiscussion.getNom();
         } else {
             return null;
         }
 
+    }
+
+    public Joueur checkSiAmoureux(Joueur cible) {
+        if (this.isLove) {                                                    // Si le joueur est amoureux
+            while (cible.getIsLove()) {
+                System.out.println("Vous ne pouvez pas agir contre votre promis-e, veuillez choisir quelqu'un d'autre.");
+                cible=demanderJoueur(false,true);
+            }
+        }
+        return cible;
     }
 
 }

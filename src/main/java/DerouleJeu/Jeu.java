@@ -6,7 +6,6 @@ import Phrases.ConsoleText;
 import joueurBot.*;
 import Roles.*;
 
-import javax.swing.*;
 import java.util.*;
 
 public class Jeu {
@@ -49,6 +48,8 @@ public class Jeu {
 
     private static int checkMortUneFois=0;
 
+
+
     // Setters
     public static void setAmoureux(Joueur[] amoureux) {
         Jeu.amoureux = amoureux;}
@@ -74,23 +75,15 @@ public class Jeu {
         Jeu.mortSauve.add(mortSauve);
     }
 
-//    public static void setVictoireLoup(boolean victoireLoup) {                   // Debug
-//        Jeu.victoireLoup = victoireLoup; }
-//
-//    public static void setVictoireVillageois(boolean victoireVillageois) {
-//        Jeu.victoireVillageois = victoireVillageois; }
-
     public static void setActionDiffVol(Runnable actionDiffVol) {
         Jeu.actionDiffVol = actionDiffVol;
     }
 
 
+
     // Getters
     public static Joueur getMaire() {
         return maire; }
-
-    public static Joueur[] getAmoureux() {
-        return Jeu.amoureux; }
 
     public static ArrayList<Joueur> getListeLG() {
         return Jeu.listeLG; }
@@ -100,9 +93,6 @@ public class Jeu {
 
     public static ArrayList<Joueur> getMortsDuSoir() {
         return Jeu.mortsDuSoir; }
-
-    public static ArrayList<Joueur> getMortSauve() {
-        return mortSauve; }
 
     public static boolean getVictoireLoup() {
         return victoireLoup; }
@@ -120,9 +110,7 @@ public class Jeu {
         return vote;
     }
 
-//    public static Runnable getActionDiffVol() {
-//        return actionDiffVol;
-//    }
+
 
     // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //
     // --- --- --- --- --- --------------- ... Manipulations de listes ... --------------- --- --- --- --- --- //
@@ -137,19 +125,19 @@ public class Jeu {
         System.out.print("|| ");
         if (removeMe){
             for (int i=0; i<listeJoueurs.size(); i++){
-                if (listeJoueurs.get(i)==grosBG){
+                if (listeJoueurs.get(i) == grosBG){
                     }
                 else{
-                System.out.print(listeJoueurs.get(i).getNom()+" || ");}
+                System.out.print(ConsoleText.CYAN_BOLD+listeJoueurs.get(i).getNom()+ConsoleText.RESET+" || ");}
             }}
         else {
             for (int i=0; i<listeJoueurs.size(); i++){
-                System.out.print(listeJoueurs.get(i).getNom()+" || ");}
+                System.out.print(ConsoleText.CYAN_BOLD+listeJoueurs.get(i).getNom()+ConsoleText.RESET+" || ");}
             }
         }
 
     public static void initialiserVotes(ArrayList<Joueur> listeJoueurs) {
-        vote.clear(); // Au cas où la map contenait déjà des valeurs
+        vote.clear();                                                     // Au cas où la map contenait déjà des valeurs
         for (Joueur joueur : listeJoueurs) {
             if (joueur.getIsAlive()) {
                 vote.put(joueur, 0);
@@ -168,10 +156,10 @@ public class Jeu {
         // Cupidon entre en jeu, les amoureux se réveillent et se découvrent
         System.out.println("\nLa première nuit est tombée, l'amour flotte dans l'air... Cupidon se réveille.");
 
-        if (grosBG.getPerso().getIdPerso()==Plateau.idCUPIDON){   // Si on est le Cupidon
+        if (grosBG.getPerso().getIdPerso()==Plateau.idCUPIDON){           // Si on est le Cupidon
             grosBG.actionDuJoueur(grosBG.getPerso().getIdPerso());
         } else {
-            for (Joueur B:listeBots){           // On cherche parmi notre liste de Bots
+            for (Joueur B:listeBots){                                     // On cherche parmi notre liste de Bots
                 if (B.getPerso().getIdPerso()==Plateau.idCUPIDON){
                     B.getBotRattache().cupiBot(listeJoueurs);
                     break;
@@ -180,7 +168,7 @@ public class Jeu {
         }
 
         for (Joueur B : listeBots){
-            B.getBotRattache().initialiserConfiance();  // J'initialise la confiance des bots entres eux + joueur
+            B.getBotRattache().initialiserConfiance();                   // J'initialise la confiance des bots entres eux + joueur
         }
     }
 
@@ -188,12 +176,12 @@ public class Jeu {
         // Préciser au joueur son rôle
         Exceptions.sleepJeu(2000);
         if (grosBG.getIsAlive()){
-            System.out.println("\nLors de ce tour, votre rôle sera le suivant : "+grosBG.getPerso().getNom());
+            System.out.println(ConsoleText.YELLOW_BOLD+"\nLors de ce tour, votre rôle sera le suivant : "+grosBG.getPerso().getNom()+ConsoleText.RESET);
             Exceptions.sleepJeu(2000);
         }
 
         // Vérifier si une des équipes a gagné
-        boolean finDuJeu = verifFinDuJeu(); if (finDuJeu) {return;}           // Debug, voir si très utile ici alors que pas de mof des listes
+        boolean finDuJeu = verifFinDuJeu(); if (finDuJeu) {return;}
 
         // Annoncer les morts
         if(mortsDuSoir.isEmpty()){
@@ -220,20 +208,20 @@ public class Jeu {
         // Annoncer si un d'entres eux était amoureux
         checkAmour();
 
-        // Annoncer le rôle des vrais morts
+        // Annoncer le rôle des vrais morts + mettre à jour les liste LG, villageois, joueurs, le maire, liste vote et confiance
         for (Joueur mort : mortsDuSoir){
             System.out.println();
-            System.out.println(mort.getPerso().revelationJ(mort));
-            Exceptions.sleepJeu(1000);
 
             // Faire entrer en jeu le chasseur
             checkChasseur(mort);
+
+            retirerDuJeu(mort);
+
+            System.out.println(mort.getPerso().revelationJ(mort));
+            Exceptions.sleepJeu(1000);
         }
 
-        // Mettre à jour les liste LG, villageois, joueurs, le maire, liste vote et confiance
-        for (Joueur mort : mortsDuSoir){
-            retirerDuJeu(mort);
-        }
+        // Mettre à jour la confiance des bots pour retirer la confiance qu'ils ont envers les morts
         for (Joueur bot : listeBots){
             for (Joueur mort : mortsDuSoir){
                 bot.getBotRattache().getConfiance().remove(mort);
@@ -257,7 +245,7 @@ public class Jeu {
 
         // Petit instant discussion
         System.out.println("\n        // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //\n" +
-                "        // --- --- --- --- --- --------------- .......Retours du Village....... --------------- --- --- --- --- --- //\n" +
+                "        // --- --- --- --- --- --------------- ......  Instant parlotte ...... --------------- --- --- --- --- --- //\n" +
                 "        // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //\n");
 
         // D'abord tous les bots y passent
@@ -266,10 +254,10 @@ public class Jeu {
             if (message != null) {
                 if (!message.contains("%r%")) {
                     listeMessagesVillages.add(bot.getNom()+" : "+message);
-                    System.out.println(bot.getNom()+" : "+message.replaceAll("%[a-z]%", ""));
+                    System.out.println(ConsoleText.CYAN_BOLD+bot.getNom()+ConsoleText.RESET+" : "+message.replaceAll("%[a-z]%", ""));
                     Exceptions.sleepJeu(2000);
                 } else {
-                    System.out.println(bot.getNom()+" : "+message.replaceAll("%[a-z]%", ""));
+                    System.out.println(ConsoleText.CYAN_BOLD+bot.getNom()+ConsoleText.RESET+" : "+message.replaceAll("%[a-z]%", ""));
                     Exceptions.sleepJeu(2000);
                 }
             }
@@ -321,17 +309,15 @@ public class Jeu {
 
         // Set isAlive en false et le retirer de la liste des joueurs, préciser son rôle pour vote de mort
         votee.setIsAlive(false);
-        System.out.println(votee.getPerso().revelationJ(votee));
 
         // Vérifier si joueur était un chasseur
         checkChasseur(votee);
 
         retirerDuJeu(votee);
 
-        // Revérifier si une des équipes a gagné
-        finDuJeu = verifFinDuJeu(); if (finDuJeu) {return;}
+        // Après l'avoir retiré du jeu, on révèle son rôle (pour pas avoir de pb avec l'affichage du nombre de lg restants)
+        System.out.println(votee.getPerso().revelationJ(votee));
 
-        checkJoueurMort();
 
         // Checker si les 2 amoureux sont toujours vivants
         checkAmour();
@@ -340,6 +326,11 @@ public class Jeu {
         if (Chasseur.getCibleChasseur()!=null) {                                    // Si le chasseur a joué ce soir
             retirerDuJeu(Chasseur.getCibleChasseur());
         }
+
+        // Revérifier si une des équipes a gagné
+        finDuJeu = verifFinDuJeu(); if (finDuJeu) {return;}
+
+        checkJoueurMort();
 
         // La confiance de tous les bots les uns pour les autres descend de un
         for (Joueur bot : listeBots){
@@ -390,19 +381,19 @@ public class Jeu {
     }
 
 
-
     // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //
     // --- --- --- --- --- --------------- .......     Méthodes    ....... --------------- --- --- --- --- --- //
     // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //
-
 
 
     public static boolean verifFinDuJeu(){
         if (listeLG.size()>listeVillageois.size()){           // S'il y a plus de LG que de villageois
             victoireLoup=true;
             return true;
-        } else if(listeLG.size()==0){                         // S'il n'y a plus de LG
+        } else if(listeLG.isEmpty()){                         // S'il n'y a plus de LG
             victoireVillageois=true;
+            return true;
+        } else if (Plateau.getSecretEnding()){                // Une fin secrète???
             return true;
         } else {
             return false;
@@ -429,7 +420,7 @@ public class Jeu {
         System.out.print("|| ");
         for (Map.Entry<Joueur, Integer> entree : vote.entrySet()){
             System.out.print(entree.getKey().getNom()+" : "+entree.getValue()+" || ");
-        } Exceptions.sleepJeu(1000);
+        } Exceptions.sleepJeu(3000);
 
         // Récupérer ceux/celui au plus grand vote
         int maxVotes = 0;
@@ -477,10 +468,13 @@ public class Jeu {
                         partenaire.setIsAlive(false);
                         // Jeu.setMortsDuSoir(partenaire);                                // On l'ajoute à la liste des mort-e-s dans la soirée
                         System.out.println(partenaire.getNom()+", partenaire de "+amour.getNom()+" a décidé de le-la rejoindre dans la mort");
-                        System.out.println(partenaire.getPerso().revelationJ(partenaire));
 
                         checkChasseur(partenaire);
                         retirerDuJeu(partenaire);                                      // On retire partenaire du jeu
+
+                        System.out.println(partenaire.getPerso().revelationJ(partenaire));
+
+
 
                     } else {
                         System.out.println(amour.getNom() + " et " + partenaire.getNom() + " étaient amoureux-euse l'un-e de l'autre.");
@@ -500,15 +494,14 @@ public class Jeu {
             } else {
                 votee.getBotRattache().actionDuBot(votee.getPerso().getIdPerso());
             }
-            // pb : on modifie morts du soir pendant une boule for, le jeu aime pas
-//            retirerDuJeu(mortsDuSoir.getLast());                                      // On sort du jeu le dernier joueur, celui qui vient d'être tué
         }
     }
 
     //Regarde si le joueur est mort et lui propose de recommencer
+    // Cette fonction a été écrite avec l'aide de ChatGPT
     public static void checkJoueurMort() {
         if (!grosBG.getIsAlive() && checkMortUneFois==0) {
-            System.out.println(ConsoleText.YELLOW_BOLD+"\nIl semble que soyiez définitivement éliminé du jeu. Souhaitez vous "+ConsoleText.RED_BOLD+"continuer"+ConsoleText.YELLOW_BOLD+" ou "+ConsoleText.RED_BOLD+"recommencer"+ConsoleText.YELLOW_BOLD+" une autre partie?");
+            System.out.println(ConsoleText.YELLOW_BOLD+"\nIl semble que soyiez définitivement éliminé du jeu. Souhaitez vous "+ConsoleText.RED_BOLD+"continuer"+ConsoleText.YELLOW_BOLD+" ou "+ConsoleText.RED_BOLD+"recommencer"+ConsoleText.YELLOW_BOLD+" une autre partie?"+ConsoleText.RESET);
             String rep = input.nextLine();
             while (!rep.equalsIgnoreCase("continuer") && !rep.equalsIgnoreCase("recommencer")) {
                 System.out.println(ConsoleText.YELLOW_BOLD+"Veuillez rentrer une des valeurs possibles.");
@@ -546,23 +539,3 @@ public class Jeu {
         vote.remove(mort);
     }
 }
-
-
-
-//            if(mort.getPerso().getNom().equals("Chasseur")){                         // Debug
-//                if(mort==grosBG){                                                    // Si le joueur était chasseur
-//                    mort.actionDuJoueur(mort.getPerso().getIdPerso());
-//                } else {
-//                    mort.getBotRattache().actionDuBot(mort.getPerso().getIdPerso());
-//                }
-//            }
-
-
-//        if (votee.getPerso().getNom().equals("Chasseur")){
-//            if(votee==grosBG){                                                    // Si le joueur était chasseur
-//                votee.actionDuJoueur(votee.getPerso().getIdPerso());
-//            } else {
-//                votee.getBotRattache().actionDuBot(votee.getPerso().getIdPerso());
-//            }
-//            retirerDuJeu(mortsDuSoir.getLast());                                  // On sort du jeu le dernier joueur, celui qui vient d'être tué
-//        }

@@ -33,8 +33,8 @@ public class PetiteFille extends Personnages{
     // Fonctions
     @Override
     public void actionNuit(Joueur cible1, Joueur cible2) {
-        int chance = random.nextInt(4);               // Il y a une chance sur 4 que l'évènement se déroule
-        if(chance==3){
+        int chance = random.nextInt(3);               // Il y a une chance sur 3 que l'évènement se déroule
+        if(chance==2){
             setJoueurObserve((Joueur) Jeu.getListeLG().get(random.nextInt(Jeu.getListeLG().size())));        // Choisit un loup aléatoire
         }
         else{
