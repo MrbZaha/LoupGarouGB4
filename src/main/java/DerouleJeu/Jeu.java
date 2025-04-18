@@ -318,7 +318,6 @@ public class Jeu {
         // Après l'avoir retiré du jeu, on révèle son rôle (pour pas avoir de pb avec l'affichage du nombre de lg restants)
         System.out.println(votee.getPerso().revelationJ(votee));
 
-
         // Checker si les 2 amoureux sont toujours vivants
         checkAmour();
 
@@ -373,7 +372,6 @@ public class Jeu {
 
         // L'idée d'utiliser une liste de Runnable a été offerte par ChatGPT
         if (actionDiffVol!=null) {                            // On effectue l'action du Voleur
-//            System.out.println("C'est bon le voleur effectue une action là là");                  // Debug
             actionDiffVol.run();
             actionDiffVol=null;                               // On reset pour la prochaine nuit
         }
@@ -449,8 +447,7 @@ public class Jeu {
             System.out.print("."); Exceptions.sleepJeu(800);
             System.out.print("."); Exceptions.sleepJeu(800);
             System.out.print("."); Exceptions.sleepJeu(1200);
-            System.out.println(" Le sort a voté pour "+votee.getNom()+" !");
-            System.out.print("."); Exceptions.sleepJeu(1200);
+            System.out.println(" Le sort a voté pour "+votee.getNom()+" !"); Exceptions.sleepJeu(1200);
             return votee;
         }
 

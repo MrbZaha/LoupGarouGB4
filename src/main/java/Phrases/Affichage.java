@@ -13,7 +13,7 @@ public class Affichage {
     private static volatile boolean triangleActive = true;
     private static volatile boolean texteAffiche = true;
 
-    public static void aff(String texte) {                                    // Permet un affichage saccade
+    public static void aff(String texte) {                                    // Permet un affichage saccadé
         skip = false;
         texteAffiche = false;
         System.out.println();                                                 // Pour gagner une ligne d'affichage
@@ -38,7 +38,7 @@ public class Affichage {
                     freqSon = 0;
                 }
 
-                Exceptions.sleepJeu(15);                            // On attend 15 ms
+                Exceptions.sleepJeu(15);                               // On attend 15 ms
             }
             texteAffiche = true;
         });
@@ -76,15 +76,13 @@ public class Affichage {
         triangle.start();
 
         try {
-            inputHandler.join();                                            // Attend que le triangle finisse de s'afficher
+            inputHandler.join();                                            // Laisse le thread qui attend une input se terminer proprement
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         SoundManager.init("src/main/resources/Sons/sfx-blink.wav");
         SoundManager.play();
-
-//        playSound("src/main/resources/Sons/sfx-blink.wav");    // Un son pour indiquer au joueur qu'on peut passer à la suite
 
         // Nettoyage
         triangleActive = false;
@@ -102,11 +100,11 @@ public class Affichage {
                 while (triangleActive) {                              // Tant que triangleActive n'est pas en false
                     System.out.print("\b\b\b\b\b    ▼");              // On print un triangle permettant au joueur de comprendre qu'il doit appuyer sur la touche d'après
                     System.out.flush();
-                    Thread.sleep(200);                          // On attends 200 ms
+                    Thread.sleep(400);                          // On attends 200 ms
 
                     System.out.print("\b\b\b\b\b     ");
                     System.out.flush();
-                    Thread.sleep(200);
+                    Thread.sleep(400);
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt(); }
@@ -114,7 +112,7 @@ public class Affichage {
         return triangleThread;
     }
 
-    // Jusqu'ici, ça n'a pas beaucoup d'utilisations, mais c'est toujours utile
+    // Jusqu'ici, ça n'a pas beaucoup d'utilisations si ce n'est pour la fin secrète, mais c'est toujours utile
     public static void affSansAttente(String texte) {
         SoundManager.init("src/main/resources/Sons/sfx-blip.wav");
         int freqSon = 0;
@@ -128,29 +126,10 @@ public class Affichage {
             }
 
             try {
-                Thread.sleep(15);                                             // On patient 15 ms
+                Thread.sleep(15);                                             // On patiente 15 ms
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
         }
     }
-
-//    public static void playSound(String soundFilePath) {
-//        new Thread(() -> {
-//            try {
-//                AudioInputStream audioInput = AudioSystem.getAudioInputStream(new File(soundFilePath));
-//                Clip clip = AudioSystem.getClip();
-//                clip.open(audioInput);
-//                clip.start();
-//
-//                // Attendre un peu (sans bloquer le thread principal)
-//                Thread.sleep(clip.getMicrosecondLength() / 1000);
-//
-//                clip.close();
-//                audioInput.close();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }).start();
-//    }
 }

@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+//La structure de base de cette classe a été créée par ChatGPT
+
 public class UsineAPhrases {
     public static final int phraseDeConfiance = 1;
     public static final int phraseDeMefiance = 2;
@@ -13,10 +15,10 @@ public class UsineAPhrases {
     private static List<String> phrasesConfiance = Arrays.asList(                 // On y ajoute %c% pour déterminer les phrase de confiance
             "%c%Je pense que %cible% est digne de confiance.",
             "%c%Je ferais confiance à %cible% les yeux fermés.",
-            "%c%%cible% est resté avec moi pour me protéger la nuit dernière! Vous pouvez lui faire confiance.",
+            "%c%%cible% est resté-e avec moi pour me protéger la nuit dernière! Vous pouvez lui faire confiance.",
             "%c%Je pense vraiment qu'on peut faire confiance à %cible%.",
             "%c%%cible% ne serait pas capable de faire du mal à une mouche, je doute fortement de sa culpabilité.",
-            "%c%Je connais %cible% depuis près d'une décennie, il ne commettrait jamais ce genre d'atrocités."
+            "%c%Je connais %cible% depuis près d'une décennie, iel ne commettrait jamais ce genre d'atrocités."
     );
 
     private static List<String> phrasesMefiance = Arrays.asList(                 // On y ajoute %m% pour déterminer les phrase de méfiance

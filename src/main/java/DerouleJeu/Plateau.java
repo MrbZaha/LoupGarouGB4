@@ -136,23 +136,13 @@ public class Plateau {
 
     public static void initialisationJeu(){
         Affichage.aff("Bien le bonjour, nouvel habitant de Thiercelieux. Nous ne pensions pas vous voir de sitôt.");
-//        Affichage.attendreTouche();
-//        Affichage.afficherTriangleAttente();
+
         Affichage.aff("Avant tout, Pouvez vous me rappeler votre nom?");
-//        System.out.println("Avant tout, Pouvez vous me rappeler votre nom?");
         Plateau jeu = new Plateau();
-//        Exceptions.sleepJeu(2500);
         Affichage.aff("Très bien... \""+Plateau.nom+"\"... J'imagine que vous n'êtes pas sans savoir des derniers évènements du village.");
-//        System.out.println("\nTrès bien... \""+Plateau.nom+"\"... J'imagine que vous n'êtes pas sans savoir des derniers évènements du village.");
-//        Exceptions.sleepJeu(3000);
         Affichage.aff("Nous avons comme qui dirait, un petit problème de... 'Nuisibles'... ");
-//        System.out.println("Nous avons comme qui dirait, un petit problème de... 'Nuisibles'... ");
-//        Exceptions.sleepJeu(3000);
         Affichage.aff("Il semblerait que quelques Loups-Garous se soient infiltrés dans le village, et... Bon je ne vous ferai pas un dessin.");
-//        System.out.println("Il semblerait que quelques Loups-Garous se soient infiltrés dans le village, et... Bon je ne vous ferai pas un dessin.");
-//        Exceptions.sleepJeu(3000);
         Affichage.aff("... Comment? Vous ne pensiez pas que le loyer seraient si bas sans raison, non?");
-//        System.out.println("... Comment? Vous ne pensiez pas que le loyer seraient si bas sans raison, non?");
 
         // Laisser la personne poser une réponse, un oui ou un non et répondre en conséquence
         System.out.print("                    "); Exceptions.sleepJeu(100);
@@ -161,6 +151,7 @@ public class Plateau {
         Affichage.affSansAttente("\"non tkt\"");
         System.out.println();
 
+        // Debug : changer en une ArrayList<String> phrasesSecretEnding contant plusieurs possibilités
         String reponse = input.nextLine();
         if (reponse.equalsIgnoreCase("bah si.") || reponse.equalsIgnoreCase("oui") || reponse.equalsIgnoreCase("si")) {
             secretEnding = true;
@@ -168,17 +159,9 @@ public class Plateau {
         }
 
         Affichage.aff("Bon. Il n'empêche que nous allons devoir nous serrer les coudes sur les prochaines semaines!");
-//        System.out.println("Bon. Il n'empêche que nous allons devoir nous serrer les coudes sur les prochaines semaines!");
-//        Exceptions.sleepJeu(3000);
         Affichage.aff("Après tout, nous n'avons tous qu'un but : survivre.");
-//        System.out.println("Après tout, nous n'avons tous qu'un but : survivre.");
-//        Exceptions.sleepJeu(3000);
         Affichage.aff("Moi? Oh mais je ne suis qu'une simple villageoise.");
-//        System.out.println("Moi? Oh mais je ne suis qu'une simple villageoise.");
-//        Exceptions.sleepJeu(3000);
         Affichage.aff("Il commence à se faire tard, vous devriez rentrer pour votre propre sécurité. Bonne nuit, et bonne chance!\n");
-//        System.out.println("Il commence à se faire tard, vous devriez rentrer pour votre propre sécurité. Bonne nuit, et bonne chance!\n");
-//        Exceptions.sleepJeu(3000);
     }
 
 

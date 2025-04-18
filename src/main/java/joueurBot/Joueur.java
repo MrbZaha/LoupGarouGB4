@@ -123,7 +123,7 @@ public class Joueur {
             try{
                 String choixNom=input.nextLine().trim();
 
-                if (passerTour && choixNom.equalsIgnoreCase(ConsoleText.CYAN_BOLD+"Personne"+ConsoleText.RESET)) {
+                if (passerTour && choixNom.equalsIgnoreCase("Personne")) {
                     System.out.println("Vous avez choisi de ne pas agir ce tour.");
                     return null;
                 }
@@ -207,10 +207,6 @@ public class Joueur {
     }
 
     public void volJoueur(){
-        if (!this.isAlive) {
-            return;
-        }
-
         //Le voleur échange une carte avec la sienne
         System.out.println("\nLe Voleur se réveille.");
         System.out.println("Avec qui souhaitez-vous échanger votre rôle?");
@@ -227,10 +223,6 @@ public class Joueur {
     }
 
     public void voitJoueur(){
-        if (!this.isAlive) {
-            return;
-        }
-
         System.out.println("\nLa Voyante se réveille.");
         System.out.println("De quel joueur souhaitez vous observer le rôle ce soir?");
         Jeu.afficherJoueur(true);
@@ -246,10 +238,6 @@ public class Joueur {
     }
 
     public void LGJoueur(){                  // Action du joueur
-        if (!this.isAlive) {
-            return;
-        }
-
         System.out.println("\nLes Loups-Garous se réveillent...");
         System.out.print("Les loups sont : ");
         for (Joueur i:Jeu.getListeLG()){
@@ -276,10 +264,6 @@ public class Joueur {
     }
 
     public void PFJoueur(){                  // Action de la petite fille
-        if (!this.isAlive) {
-            return;
-        }
-
         System.out.println("\nLa petite fille se réveille...");
 
         System.out.print("."); Exceptions.sleepJeu(800);
@@ -296,10 +280,6 @@ public class Joueur {
     }
 
     public void sortJoueur(){
-        if (!this.isAlive) {
-            return;
-        }
-
         System.out.println("\nLa Sorcière se réveille...");
         if (!Jeu.getMortsDuSoir().isEmpty()){
             System.out.println(Jeu.getMortsDuSoir().get(0).getNom()+" risque de mourir ce soir.");
@@ -378,12 +358,6 @@ public class Joueur {
             Jeu.afficherJoueur(true);
             cible=demanderJoueur(false,true);
             checkSiAmoureux(cible);
-//            if (this.isLove) {                                                    // Si le joueur est amoureux
-//                while (cible.getIsLove()) {
-//                    System.out.println("Vous ne pouvez pas agir contre votre promis-e, veuillez choisir quelqu'un d'autre.");
-//                    cible=demanderJoueur(false,true);
-//                }
-//            }
         }
 
 
@@ -405,7 +379,7 @@ public class Joueur {
         String ouiNon = input.nextLine();
 
         while (!ouiNon.equalsIgnoreCase("OUI") && !ouiNon.equalsIgnoreCase("NON")) {
-            System.out.println("Erreur : Veuillez entrer le mot "+ConsoleText.BLUE_BOLD+"\"OUI\""+ConsoleText.RESET+" ou "+ConsoleText.BLUE_BOLD+"\"NON\"");
+            System.out.println("Erreur : Veuillez entrer le mot "+ConsoleText.BLUE_BOLD+"\"OUI\""+ConsoleText.RESET+" ou "+ConsoleText.BLUE_BOLD+"\"NON\""+ConsoleText.RESET);
             ouiNon = input.nextLine();
         }
 
