@@ -3,7 +3,6 @@ package Phrases;
 import Exceptions.Exceptions;
 
 import java.io.*;
-import javax.sound.sampled.*;
 
 // Cette classe a été réalisée en bonne partie avec l'aide de ChatGPT
 
@@ -30,7 +29,7 @@ public class Affichage {
                 if (skip && !texteAffiche) {
                     System.out.print(texte.substring(texte.indexOf(c) + 1));
                     break;
-                };
+                }
 
                 freqSon++;
                 if (freqSon == 6) {                                           // Tous les 6 caractères, on lance un petit son
@@ -100,7 +99,7 @@ public class Affichage {
                 while (triangleActive) {                              // Tant que triangleActive n'est pas en false
                     System.out.print("\b\b\b\b\b    ▼");              // On print un triangle permettant au joueur de comprendre qu'il doit appuyer sur la touche d'après
                     System.out.flush();
-                    Thread.sleep(400);                          // On attends 200 ms
+                    Thread.sleep(400);                          // On attends 400 ms
 
                     System.out.print("\b\b\b\b\b     ");
                     System.out.flush();

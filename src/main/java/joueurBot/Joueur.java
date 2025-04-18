@@ -7,7 +7,6 @@ import Exceptions.MauvaisInput;
 import Phrases.ConsoleText;
 import Roles.*;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Joueur {
@@ -32,7 +31,7 @@ public class Joueur {
     public Joueur(String nomE, int personnage, Bot bot){
         this.nom=nomE;
         this.idJoueur=nbJoueur;       // Le bot prend un identifiant
-        this.nbJoueur+=1;             // À chaque bot créé, on incrémente nbJoueur
+        nbJoueur+=1;             // À chaque bot créé, on incrémente nbJoueur
 
         setPerso(personnage);
 
@@ -45,9 +44,6 @@ public class Joueur {
     //Setters
     public void setIsAlive(boolean isDead){
         this.isAlive=isDead; }
-
-    public void setId(int id){
-        this.idJoueur=id; }
 
     public void setPerso(int numero){ // On assigne le personnage du joueur
         switch (numero){
@@ -82,9 +78,6 @@ public class Joueur {
 
     public int getIdJoueur() {
         return this.idJoueur; }
-
-    public static int getNbJoueur() {
-        return Joueur.nbJoueur; }
 
     public Bot getBotRattache() {
         return botRattache; }
@@ -162,16 +155,14 @@ public class Joueur {
 
     // Vérifie si un nom est valide et retourne le joueur correspondant
     public static Joueur verifierNomJoueur(String nom, boolean removeMe) throws MauvaisInput {
-        if (removeMe == false) {
+        if (!removeMe) {
             for (Joueur joueur : Jeu.getListeJoueurs()) {
                 if (joueur.getNom().equalsIgnoreCase(nom)) {           // On ignore la casse
                     return joueur;
                 }
             }
         } else {
-            if (Plateau.getGrosBG().getNom().equalsIgnoreCase(nom)){  // Si j'ai rentré mon propre nom
-                // Ne rien faire
-            } else{
+            if (!Plateau.getGrosBG().getNom().equalsIgnoreCase(nom)){  // Si je n'ai pas rentré mon propre nom
                 for (Joueur joueur : Jeu.getListeJoueurs()) {
                     if (joueur.getNom().equalsIgnoreCase(nom)) {      // On ignore la casse
                         return joueur;
@@ -306,6 +297,7 @@ public class Joueur {
         switch (reponse){
             case "O" :
                 if (Sorciere.getPotionVie()==0 && !Jeu.getMortsDuSoir().isEmpty()){
+                    // On ne fait rien, normalement on ne devrait pas passer par ce statement
                 }
                 Sorciere.setChoixVieMort(1);
                 Plateau.getGrosBG().getPerso().actionNuit(Jeu.getMortsDuSoir().get(0), null);

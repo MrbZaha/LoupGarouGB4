@@ -22,10 +22,12 @@ public class Voleur extends Personnages{
     @Override
     public void actionNuit(Joueur joueurActuel, Joueur cible) {
         if (cible==null) {return;}                                // Si personne n'est choisi, par sécurité
-        Personnages tempPerso = joueurActuel.getPerso();      // Capture temporaire du rôle du joueur actuel
+        String nomTempPerso = joueurActuel.getPerso().getNom();   // Capture temporaire du nom du rôle du joueur actuel
+        Personnages tempPerso = joueurActuel.getPerso();          // Capture temporaire du rôle du joueur actuel
+
 
         joueurActuel.getPerso().setNom(cible.getPerso().getNom()); // Permet de ne pas tromper la voyante
-        cible.getPerso().setNom(tempPerso.getNom());
+        cible.getPerso().setNom(nomTempPerso);
 
         Runnable action = () -> {                                 // On stocke l'action dans un Runnable sans l'exécuter de suite
 

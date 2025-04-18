@@ -5,7 +5,6 @@ import Phrases.ConsoleText;
 import Phrases.Affichage;
 import joueurBot.*;
 
-import javax.sound.midi.Soundbank;
 import java.util.*;
 
 public class Plateau {
@@ -19,7 +18,8 @@ public class Plateau {
     public static final int idSORCIERE=5;
     public static final int idCHASSEUR=6;
     public static final int idVILLAGEOIS=7;
-    private int numBot=0;
+
+    private static int numBot = 0;
 
     private static int nbJoueur=9;                     // Contient le nombre de joueurs total
     private static ArrayList<Integer> listePersoPossible=new ArrayList<>();     // Contient la liste des personnages possibles
@@ -49,12 +49,12 @@ public class Plateau {
         System.out.print("Veuillez rentrer votre nom : ");
         nom = input.nextLine();
         while (nom.equalsIgnoreCase("")) {
-            System.out.println("Ce nom n'est pas possible, veuillez réessayer.");
+            System.out.println(ConsoleText.YELLOW_BOLD+"Ce nom n'est pas possible, veuillez réessayer."+ConsoleText.RESET);
             nom = input.nextLine();
         }
 
         grosBG = new Joueur(nom, listePersoPossible.get(assignement), null);  // Initialisation du rôle du joueur
-        this.listePersoPossible.remove(assignement);
+        listePersoPossible.remove(assignement);
 
         if(grosBG.getPerso().getIdPerso()==idLG){Jeu.setListeLG(1,grosBG); //On ajoute aux listes de villageois et loups
         }else{Jeu.setListeVillageois(1,grosBG);}
@@ -87,13 +87,13 @@ public class Plateau {
 
             numBot++;
         }
+        for (Joueur j: Jeu.getListeBots()) {   // Debug
+            System.out.println("Joueur : "+j.getNom()+"     rôle : "+j.getPerso().getNom()+"     jsp : "+j.getBotRattache());
+        }
     }
 
 
     // Getters
-    public static int getNbJoueur() {
-        return nbJoueur; }
-
     public static String getNom() {
         return nom; }
 
@@ -106,24 +106,26 @@ public class Plateau {
 
 
     // Setters
-    public static void setNbJoueur(int nbJoueur) {
-        Plateau.nbJoueur = nbJoueur;}
-
     public void setListePersoPossible(int nombreJoueur) {
         if (nombreJoueur==9){                           // Si on a 9 joueurs
-            this.listePersoPossible.add(this.idVOLEUR);
-            this.listePersoPossible.add(this.idCUPIDON);
-            this.listePersoPossible.add(this.idVOYANTE);
-            this.listePersoPossible.add(this.idLG); this.listePersoPossible.add(this.idLG);     // On a 2 loups
-            this.listePersoPossible.add(this.idPETITEFILLE);
-            this.listePersoPossible.add(this.idSORCIERE);
-            this.listePersoPossible.add(this.idCHASSEUR);
-            this.listePersoPossible.add(this.idVILLAGEOIS);
+            listePersoPossible.add(idVOLEUR);
+            listePersoPossible.add(idCUPIDON);
+            listePersoPossible.add(idVOYANTE);
+            listePersoPossible.add(idLG); listePersoPossible.add(idLG);     // On a 2 loups
+            listePersoPossible.add(idPETITEFILLE);
+            listePersoPossible.add(idSORCIERE);
+            listePersoPossible.add(idCHASSEUR);
+            listePersoPossible.add(idVILLAGEOIS);
         }
         else{                                          // Si le programme a été modifié...
-            System.out.println("On dirait que des paramètres du programme ont été modifiés.");
-            System.out.println("Veuillez assigner à la variable 'nbJoueur', présente dans la classe Plateau,");
-            System.out.println("la valeur '9' afin de pouvoir jouer.");
+            System.out.println("""
+                    On dirait que des paramètres du programme ont été modifiés.
+                    Veuillez assigner à la variable 'nbJoueur', présente dans la classe Plateau,
+                    la valeur '9' afin de pouvoir jouer.
+                    """);
+//            System.out.println("On dirait que des paramètres du programme ont été modifiés.");
+//            System.out.println("Veuillez assigner à la variable 'nbJoueur', présente dans la classe Plateau,");
+//            System.out.println("la valeur '9' afin de pouvoir jouer.");
             System.exit(0);
         }
     }

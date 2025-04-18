@@ -126,6 +126,7 @@ public class Jeu {
         if (removeMe){
             for (int i=0; i<listeJoueurs.size(); i++){
                 if (listeJoueurs.get(i) == grosBG){
+                    // On ne fait rien
                     }
                 else{
                 System.out.print(ConsoleText.CYAN_BOLD+listeJoueurs.get(i).getNom()+ConsoleText.RESET+" || ");}
@@ -244,9 +245,11 @@ public class Jeu {
         mortSauve.clear();
 
         // Petit instant discussion
-        System.out.println("\n        // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //\n" +
-                "        // --- --- --- --- --- --------------- ......  Instant parlotte ...... --------------- --- --- --- --- --- //\n" +
-                "        // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //\n");
+        System.out.println("""
+                        // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //
+                        // --- --- --- --- --- --------------- ......  Instant parlotte ...... --------------- --- --- --- --- --- //
+                        // --- --- --- --- --- --------------- ....... --------------- ....... --------------- --- --- --- --- --- //
+                """);
 
         // D'abord tous les bots y passent
         for (Joueur bot : listeBots) {

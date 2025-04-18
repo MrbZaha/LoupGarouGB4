@@ -92,6 +92,10 @@ public class Bot {
         Joueur amourUn = listeJoueurs.get(index1);
         Joueur amourDeux = listeJoueurs.get(index2);
 
+        for (Joueur j: Jeu.getListeBots()) {   // Debug
+            System.out.println("Joueur : "+j.getNom()+"     rôle : "+j.getPerso().getNom()+"     jsp : "+j.getBotRattache());
+        }
+
         // Lancer l'action de Cupidon
         this.joueur.getPerso().actionNuit(amourUn,amourDeux);
 
