@@ -92,10 +92,6 @@ public class Bot {
         Joueur amourUn = listeJoueurs.get(index1);
         Joueur amourDeux = listeJoueurs.get(index2);
 
-        for (Joueur j: Jeu.getListeBots()) {   // Debug
-            System.out.println("Joueur : "+j.getNom()+"     rôle : "+j.getPerso().getNom()+"     jsp : "+j.getBotRattache());
-        }
-
         // Lancer l'action de Cupidon
         this.joueur.getPerso().actionNuit(amourUn,amourDeux);
 
@@ -279,10 +275,6 @@ public class Bot {
         if (Jeu.getMaire()==this.joueur){
             Jeu.getVote().put(cible,Jeu.getVote().get(cible)+2);
         } else {
-//            for (Map.Entry<Joueur, Integer> i : Jeu.getVote().entrySet()){   // Debug
-//                System.out.print(i.getKey().getNom()+ "   ");
-//            }
-//            System.out.println(cible.getNom());
             Jeu.getVote().put(cible,Jeu.getVote().get(cible)+1);
         }
     }
@@ -414,7 +406,7 @@ public class Bot {
         // Pour chacun des messages de confiance ou méfiance, on vérifie quel joueur a été pointé du doigt
         for (String msg : messages) {
             String[] parts = msg.split(":", 2);
-            if (parts.length < 2) continue;                               // Debug, voir si fonctionne en retirant
+            if (parts.length < 2) continue;                               // Si on a bien 2 parties de message
 
             String nomParlant = parts[0];                                 // On récupère le joueur qui a parlé
             String contenu = parts[1];                                    // Ainsi que sa phrase

@@ -87,9 +87,6 @@ public class Plateau {
 
             numBot++;
         }
-        for (Joueur j: Jeu.getListeBots()) {   // Debug
-            System.out.println("Joueur : "+j.getNom()+"     rôle : "+j.getPerso().getNom()+"     jsp : "+j.getBotRattache());
-        }
     }
 
 
@@ -153,9 +150,16 @@ public class Plateau {
         Affichage.affSansAttente("\"non tkt\"");
         System.out.println();
 
-        // Debug : changer en une ArrayList<String> phrasesSecretEnding contant plusieurs possibilités
+        ArrayList<String> phrasesSecretEnding = new ArrayList<>();
+        phrasesSecretEnding.add("bah si.");
+        phrasesSecretEnding.add("bah si");
+        phrasesSecretEnding.add("oui");
+        phrasesSecretEnding.add("OUI");
+        phrasesSecretEnding.add("si");
+
+
         String reponse = input.nextLine();
-        if (reponse.equalsIgnoreCase("bah si.") || reponse.equalsIgnoreCase("oui") || reponse.equalsIgnoreCase("si")) {
+        if (phrasesSecretEnding.contains(reponse)) {
             secretEnding = true;
             boolean finDuJeu = Jeu.verifFinDuJeu(); if (finDuJeu) return;
         }

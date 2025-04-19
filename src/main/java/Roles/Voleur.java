@@ -21,25 +21,25 @@ public class Voleur extends Personnages{
 
     @Override
     public void actionNuit(Joueur joueurActuel, Joueur cible) {
-        if (cible==null) {return;}                                // Si personne n'est choisi, par sécurité
-        String nomTempPerso = joueurActuel.getPerso().getNom();   // Capture temporaire du nom du rôle du joueur actuel
-        Personnages tempPerso = joueurActuel.getPerso();          // Capture temporaire du rôle du joueur actuel
+        if (cible==null) {return;}                                 // Si personne n'est choisi, par sécurité
+        String nomTempPerso = joueurActuel.getPerso().getNom();    // Capture temporaire du nom du rôle du joueur actuel
+        Personnages tempPerso = joueurActuel.getPerso();           // Capture temporaire du rôle du joueur actuel
 
 
         joueurActuel.getPerso().setNom(cible.getPerso().getNom()); // Permet de ne pas tromper la voyante
         cible.getPerso().setNom(nomTempPerso);
 
-        Runnable action = () -> {                                 // On stocke l'action dans un Runnable sans l'exécuter de suite
+        Runnable action = () -> {                                  // On stocke l'action dans un Runnable sans l'exécuter de suite
 
-            joueurActuel.setPerso(cible.getPerso().getIdPerso()); // Changement des rôles et initiation d'un nouveau
+            joueurActuel.setPerso(cible.getPerso().getIdPerso());  // Changement des rôles et initiation d'un nouveau
             cible.setPerso(tempPerso.getIdPerso());
 
             if (joueurActuel.getPerso().getIdPerso()==Plateau.idLG) { // Si le voleur s'est changé en loup garou
-                Jeu.setListeVillageois(-1, joueurActuel); // On le retire de la liste des villageois...
-                Jeu.setListeVillageois(1, cible);         // Et on y ajoute sa cible
+                Jeu.setListeVillageois(-1, joueurActuel);  // On le retire de la liste des villageois...
+                Jeu.setListeVillageois(1, cible);          // Et on y ajoute sa cible
 
-                Jeu.setListeLG(1, joueurActuel);          // On l'ajoute à la liste de LG...
-                Jeu.setListeLG(-1, cible);                // Et on en retire sa cible
+                Jeu.setListeLG(1, joueurActuel);           // On l'ajoute à la liste de LG...
+                Jeu.setListeLG(-1, cible);                 // Et on en retire sa cible
             }
         };
 

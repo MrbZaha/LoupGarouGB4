@@ -10,7 +10,7 @@ import java.io.File;
 public class SoundManager {
     private static Clip clip;
 
-    public static void init(String soundFilePath) {
+    public static void init(String soundFilePath) {               // Permet de définir le son à utiliser
         try {
             AudioInputStream audioInput = AudioSystem.getAudioInputStream(new File(soundFilePath));
             clip = AudioSystem.getClip();
@@ -24,9 +24,9 @@ public class SoundManager {
     public static void play() {
         if (clip != null) {
             if (clip.isRunning()) {
-                clip.stop();  // Stoppe le son s’il est encore en cours (évite empilement)
+                clip.stop();                   // Stoppe le son s’il est encore en cours (évite empilement)
             }
-            clip.setFramePosition(0); // Revenir au début
+            clip.setFramePosition(0);          // Revenir au début
             clip.start();
         }
     }

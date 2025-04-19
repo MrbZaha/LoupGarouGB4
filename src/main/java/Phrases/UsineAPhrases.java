@@ -7,7 +7,7 @@ import java.util.Random;
 //La structure de base de cette classe a été créée par ChatGPT
 
 public class UsineAPhrases {
-    public static final int phraseDeConfiance = 1;
+    public static final int phraseDeConfiance = 1;                                // Pour faciliter l'appel de la fonction
     public static final int phraseDeMefiance = 2;
     public static final int phraseAleatoire = 0;
 

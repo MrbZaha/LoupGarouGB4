@@ -330,7 +330,7 @@ public class Joueur {
             Jeu.afficherJoueur(true);
             System.out.print(ConsoleText.CYAN_BOLD+"Personne"+ConsoleText.RESET+" ||");
 
-            Joueur cible=demanderJoueur(false,true);
+            Joueur cible=demanderJoueur(true,true);
             System.out.println("\n"+Plateau.getGrosBG().getNom()+" a décidé de tuer "+cible.getNom());
             System.out.println(cible.getPerso().revelationJ(cible));
             Plateau.getGrosBG().getPerso().actionJour(Plateau.getGrosBG(), cible);

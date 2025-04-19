@@ -8,8 +8,8 @@ import Roles.*;
 
 import java.util.*;
 
+// Contient les grandes étapes de déroulement du jeu
 public class Jeu {
-    // Contient les grandes étapes de déroulement du jeu
     public static final int idCUPIDON=0;
     public static final int idVOLEUR=1;
     public static final int idVOYANTE=2;
@@ -39,6 +39,7 @@ public class Jeu {
 
     private static boolean victoireLoup=false;
     private static boolean victoireVillageois=false;
+    private static boolean perteTous=false;
 
     private static final Joueur grosBG =Plateau.getGrosBG();
 
@@ -99,6 +100,9 @@ public class Jeu {
 
     public static boolean getVictoireVillageois() {
         return victoireVillageois; }
+
+    public static boolean getPerteTous() {
+        return perteTous; }
 
     public static ArrayList<Joueur> getListeJoueurs() {
         return listeJoueurs; }
@@ -178,8 +182,7 @@ public class Jeu {
         Exceptions.sleepJeu(2000);
         if (grosBG.getIsAlive()){
             System.out.println(ConsoleText.YELLOW_BOLD+"\nLors de ce tour, votre rôle sera le suivant : "+grosBG.getPerso().getNom()+ConsoleText.RESET);
-            Exceptions.sleepJeu(2000);
-        }
+            Exceptions.sleepJeu(2000); }
 
         // Vérifier si une des équipes a gagné
         boolean finDuJeu = verifFinDuJeu(); if (finDuJeu) {return;}
@@ -194,8 +197,7 @@ public class Jeu {
             System.out.print("\nNous comptons "+mortsDuSoir.size()+" mort-e-s pour cette nuit : ");
             for (Joueur i : mortsDuSoir){
                 System.out.print(i.getNom()+"    "); }
-            System.out.println(); Exceptions.sleepJeu(4000);
-        }
+            System.out.println(); Exceptions.sleepJeu(4000); }
 
         // Annoncer les revenants s'il y en a
         if (mortSauve.isEmpty()){
@@ -203,8 +205,7 @@ public class Jeu {
         } else {
             System.out.println("\nCependant, "+mortSauve.get(0).getNom()+" a pu être sauvé ce soir!\n");
             Exceptions.sleepJeu(2000);
-            mortsDuSoir.remove(mortSauve.get(0));
-        }
+            mortsDuSoir.remove(mortSauve.get(0)); }
 
         // Annoncer si un d'entres eux était amoureux
         checkAmour();
@@ -271,7 +272,7 @@ public class Jeu {
             String messageJoueur = grosBG.messJoueur();
             if (messageJoueur!=null) {
                 listeMessagesVillages.add(messageJoueur);                                           // On l'ajoute à la liste des phrases à vérifier
-                System.out.println(messageJoueur.replaceAll("%[a-z]%", ""));      // Aidé par ChatGPT
+                System.out.println(messageJoueur.replaceAll("%[a-z]%", ""));      // Aidé par ChatGPT pour savoir comment retirer le code entre %
             }
         }
 
@@ -346,7 +347,7 @@ public class Jeu {
     public static void tourDeJeuNuit(){
         // Pour l'ensemble des joueurs en vie, lancera leur actionNuit
         for (int indexPerso = idVOLEUR ; indexPerso < idCHASSEUR ; indexPerso++) { // On fait jouer tous les joueurs entre le voleur et chasseur non compris
-            if (indexPerso==idLG) {                      // Les LG sont plusieurs, donc il faut préciser certaines conditions
+            if (indexPerso==idLG) {                                                // Les LG sont plusieurs, donc il faut préciser certaines conditions
                 // On regarde s’il y a un joueur humain parmi eux
                 boolean joueurHumain = listeLG.stream().anyMatch(j -> j == grosBG);
 
@@ -373,7 +374,7 @@ public class Jeu {
             }
         }
 
-        // L'idée d'utiliser une liste de Runnable a été offerte par ChatGPT
+        // L'idée d'utiliser une liste de Runnable provient de ChatGPT
         if (actionDiffVol!=null) {                            // On effectue l'action du Voleur
             actionDiffVol.run();
             actionDiffVol=null;                               // On reset pour la prochaine nuit
@@ -388,19 +389,24 @@ public class Jeu {
 
 
     public static boolean verifFinDuJeu(){
-        if (listeLG.size()>listeVillageois.size()){           // S'il y a plus de LG que de villageois
+        if (listeJoueurs.isEmpty()) {                              // Si tout le monde est mort
+            perteTous=true;
+            return true;
+        }
+        else if (listeLG.size()>listeVillageois.size()){           // S'il y a plus de LG que de villageois
             victoireLoup=true;
             return true;
-        } else if(listeLG.isEmpty()){                         // S'il n'y a plus de LG
+        } else if(listeLG.isEmpty()){                             // S'il n'y a plus de LG
             victoireVillageois=true;
             return true;
-        } else if (Plateau.getSecretEnding()){                // Une fin secrète???
+        } else if (Plateau.getSecretEnding()){                    // Une fin secrète???
             return true;
         } else {
             return false;
         }
     }
 
+    // Cette méthode a été créée avec l'aide de ChatGPT
     public static Joueur voteGeneral(){
         // (Ré)initialisation de la liste de votes
         initialiserVotes(listeJoueurs);
@@ -416,14 +422,14 @@ public class Jeu {
                 }
             }
         }
-        // Observation de la liste des votes, on récupère ceux au plus grand vote
+        // Observation de la liste des votes, on récupère celui-celle-ceux au plus grand vote
         System.out.println("\nVoici le résultat des votes : ");
         System.out.print("|| ");
         for (Map.Entry<Joueur, Integer> entree : vote.entrySet()){
             System.out.print(entree.getKey().getNom()+" : "+entree.getValue()+" || ");
         } Exceptions.sleepJeu(3000);
 
-        // Récupérer ceux/celui au plus grand vote
+        // Récupérer ceux-celui au plus grand vote
         int maxVotes = 0;
         List<Joueur> joueursMaxVotes = new ArrayList<>();
         for (Map.Entry<Joueur, Integer> entry:vote.entrySet()) {
@@ -439,7 +445,7 @@ public class Jeu {
             }
         }
 
-        // Retourner le joueur pour lequel les joueurs on voté
+        // Retourner le joueur pour lequel les joueurs ont voté
         if (joueursMaxVotes.size() == 1) {
             return joueursMaxVotes.get(0);
         } else {
@@ -453,9 +459,6 @@ public class Jeu {
             System.out.println(" Le sort a voté pour "+votee.getNom()+" !"); Exceptions.sleepJeu(1200);
             return votee;
         }
-
-        // Faire un petit jeu pour choisir, au hasard ou bien refaire un vote,
-
     }
 
     public static void checkAmour(){
@@ -466,7 +469,6 @@ public class Jeu {
 
                     if (partenaire.getIsAlive()) {                                     // Si le-la partenaire est encore vivant-e
                         partenaire.setIsAlive(false);
-                        // Jeu.setMortsDuSoir(partenaire);                                // On l'ajoute à la liste des mort-e-s dans la soirée
                         System.out.println(partenaire.getNom()+", partenaire de "+amour.getNom()+" a décidé de le-la rejoindre dans la mort");
 
                         checkChasseur(partenaire);
@@ -490,8 +492,8 @@ public class Jeu {
     public static void checkChasseur(Joueur votee) {                                   // Vérifier si joueur était un chasseur
         if (votee.getPerso().getNom().equals("Chasseur")){
             if(votee==grosBG){                                                         // Si le joueur était chasseur
-                votee.actionDuJoueur(votee.getPerso().getIdPerso());
-            } else {
+                votee.actionDuJoueur(votee.getPerso().getIdPerso());                   // Iel effectue son action
+            } else {                                                                   // Si c'était un bot
                 votee.getBotRattache().actionDuBot(votee.getPerso().getIdPerso());
             }
         }
