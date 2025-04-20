@@ -16,13 +16,12 @@ public class Joueur {
 
     private static Scanner input = new Scanner(System.in);
 
-    private static int nbJoueur = 0;     // Permet de définir l'identifiant de chaque joueur
-    private int idJoueur;              // Le joueur aura un identifiant, aide pour l'établissement des confiances des bots
+    private static int nbJoueur = 0;   // Permet de définir l'identifiant de chaque joueur
+    private int idJoueur;              // Le joueur aura un identifiant, à l'origine aide pour l'établissement des confiances des bots
                                        // Le vrai joueur aura toujours l'indice 0
 
     private Personnages perso;
 
-//    private boolean isBot=true;
     private Bot botRattache;
 
     private Joueur joueurDiscussion;
@@ -30,15 +29,12 @@ public class Joueur {
     //Constructeur
     public Joueur(String nomE, int personnage, Bot bot){
         this.nom=nomE;
-        this.idJoueur=nbJoueur;       // Le bot prend un identifiant
-        nbJoueur+=1;             // À chaque bot créé, on incrémente nbJoueur
+        this.idJoueur=nbJoueur;       // Le bot ou joueur prend un identifiant
+        nbJoueur+=1;                  // À chaque bot créé, on incrémente nbJoueur
 
         setPerso(personnage);
 
         this.botRattache=bot;
-//        if (bot==null){
-//            this.isBot=false;
-//        }
     }
 
     //Setters
@@ -111,7 +107,7 @@ public class Joueur {
     // La création de demanderJoueur et verifierNomJoueur ont été réalisée en partie par ChatGPT, en particulier pour la gestion d'exceptions
     // Permet de choisir un joueur sur lequel effectuer une action
     public static Joueur demanderJoueur(boolean passerTour, boolean removeMe) {    // Méthode pour demander le nom d'un joueur
-        System.out.println();              // On revient à la ligne
+        System.out.println();                                                      // On revient à la ligne
         while(true){
             try{
                 String choixNom=input.nextLine().trim();
@@ -141,7 +137,7 @@ public class Joueur {
                     choixOption = input.nextLine();}
 
                 if (choixOption.equalsIgnoreCase("o")) {           // On ignore la casse
-                    return "O";                         //On modifie choixVieMort
+                    return "O";                                                //On modifie choixVieMort
                 } else if(choixOption.equalsIgnoreCase("x")){
                     return "X";
                 } else if(choixOption.equalsIgnoreCase("r")){
@@ -175,7 +171,7 @@ public class Joueur {
 
 
 
-
+    // Propose au joueur d'unir 2 joueurs
     public void cupiJoueur(){
         System.out.println("Qui sera touché de votre flèche cette nuit? (Veuillez rentrez 2 noms parmi la liste, un par un)");
         Jeu.afficherJoueur(false);
@@ -209,7 +205,7 @@ public class Joueur {
             System.out.println("Très bien, aucun vol ne sera réalisé ce soir.\n");
         } else {
             Plateau.getGrosBG().getPerso().actionNuit(Plateau.getGrosBG(),cible);
-            System.out.println("Au lever de soleil, vous possèderez ce rôle : "+cible.getPerso().getNom());
+            System.out.println("Au lever de soleil, vous possèderez ce rôle : "+this.getPerso().getNom());
         }
     }
 
@@ -360,7 +356,7 @@ public class Joueur {
             Jeu.getVote().put(cible,Jeu.getVote().get(cible)+1);
         }
 
-        // À la fin, si plusieurs joueurs sont égaux en nombre de vote, on lance l'évènement, un deux trois bras de fer chinois??
+        // À la fin, si plusieurs joueurs sont égaux en nombre de vote, on lance un tirage au sort
     }
 
 

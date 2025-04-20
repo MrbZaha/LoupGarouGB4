@@ -279,6 +279,10 @@ public class Bot {
         }
     }
 
+
+
+
+
     private Joueur choisirCible(boolean confiant) {              // Choisissent une cible en laquelle ils ont confiance(true) ou non(false)
         Joueur plusMoinsFiable = null;
         int confianceMin = Integer.MAX_VALUE;
@@ -313,12 +317,8 @@ public class Bot {
         return plusMoinsFiable;                                     // Retourner le joueur à la plus petite confiance
     }
 
-
-
-
-    public String messBot() {                                       // En fonction de son rôle, le bot renvoit un message particulier
+    public String messBot() {              // En fonction de son rôle, le bot renvoit un message particulier
         // La petite fille, la voyante, le loup et quelques autres personnages pourront parler durant un tour de parole
-        // J'ai pensé à faire parler l'ex joueur mais... Il a déjà change de rôle à ce moment là
         String phrase;
         double probaTypePhrase;
 
@@ -331,7 +331,7 @@ public class Bot {
                 probaTypePhrase = random.nextDouble();
                 int typePhrase;
 
-                // Bitch sur lui 70% du temps, dit qu'on peut lui faire confiance 20% du temps et n'importe quoi 10% du temps
+                // Parle en mal 70% du temps, dit qu'on peut lui faire confiance 20% du temps et n'importe quoi 10% du temps
                 if (probaTypePhrase < 0.7) typePhrase=UsineAPhrases.phraseDeMefiance;
                 else if (probaTypePhrase < 0.9) typePhrase=UsineAPhrases.phraseDeConfiance;
                 else typePhrase=UsineAPhrases.phraseAleatoire;
@@ -412,15 +412,13 @@ public class Bot {
             String contenu = parts[1];                                    // Ainsi que sa phrase
 
             Joueur parlant = getJoueurDepuisNom(nomParlant);
-            if (parlant == null || parlant == this.joueur) continue;      // Si parlant est le bot actuel ou n'existe pas
+            if (parlant == null || parlant == this.joueur)
+                continue;      // Si parlant est le bot actuel ou n'existe pas
 
             Joueur accuse = parlant.getJoueurDiscussion();
 
-            // Si le bot fait confiance au parlant, il ajuste sa confiance envers la cible
-
-//            for (Joueur autre : Jeu.getListeJoueurs()) {
-//                if (contenu.contains(autre.getNom())) {                   // On regarde le joueur contenu dans la ligne en question
-            if (getConfiance().get(parlant)<3){                   // Si on ne fait vraiment pas confiance au parlant
+            // Si le bot fait confiance au parlant, il ajuste sa confiance envers la cible du parlant
+            if (getConfiance().get(parlant)<4){                   // Si on ne fait vraiment pas confiance au parlant
                 // On n'interprète pas ses paroles car elles n'en valent pas la peine
             } else {                                              // Si on fait confiance, la confiance change
                 if (contenu.contains("%m%")) {
@@ -429,8 +427,6 @@ public class Bot {
                 } else if (contenu.contains("%c%")) {
                     // confiance
                     this.setConfiance(accuse, +2);
-//                        }
-//                    }
                 }
             }
         }
@@ -442,6 +438,6 @@ public class Bot {
                 return joueur;
             }
         }
-        return null;                                                    // Ne devrait normalement pas arriver car tous les joueurs
+        return null;                                                    // par mesure de sécurité
     }
 }

@@ -48,13 +48,14 @@ public class Plateau {
         System.out.println();
         System.out.print("Veuillez rentrer votre nom : ");
         nom = input.nextLine();
-        while (nom.equalsIgnoreCase("")) {
+        while (nom.equalsIgnoreCase("") || nom.equalsIgnoreCase("Personne")) {
             System.out.println(ConsoleText.YELLOW_BOLD+"Ce nom n'est pas possible, veuillez réessayer."+ConsoleText.RESET);
             nom = input.nextLine();
         }
 
-        grosBG = new Joueur(nom, listePersoPossible.get(assignement), null);  // Initialisation du rôle du joueur
-        listePersoPossible.remove(assignement);
+        grosBG = new Joueur(nom, listePersoPossible.get(assignement), null);  // Initialisation du rôle du joueur // débug
+
+        listePersoPossible.remove(assignement); //debug
 
         if(grosBG.getPerso().getIdPerso()==idLG){Jeu.setListeLG(1,grosBG); //On ajoute aux listes de villageois et loups
         }else{Jeu.setListeVillageois(1,grosBG);}
@@ -101,13 +102,15 @@ public class Plateau {
     public static boolean getSecretEnding() {
         return secretEnding; }
 
+    public static int getNbJoueur() {
+        return nbJoueur; }
 
     // Setters
-    public void setListePersoPossible(int nombreJoueur) {
+    public static void setListePersoPossible(int nombreJoueur) {
         if (nombreJoueur==9){                           // Si on a 9 joueurs
             listePersoPossible.add(idVOLEUR);
             listePersoPossible.add(idCUPIDON);
-            listePersoPossible.add(idVOYANTE);
+            listePersoPossible.add(idVOYANTE);        // Debug
             listePersoPossible.add(idLG); listePersoPossible.add(idLG);     // On a 2 loups
             listePersoPossible.add(idPETITEFILLE);
             listePersoPossible.add(idSORCIERE);
@@ -120,9 +123,6 @@ public class Plateau {
                     Veuillez assigner à la variable 'nbJoueur', présente dans la classe Plateau,
                     la valeur '9' afin de pouvoir jouer.
                     """);
-//            System.out.println("On dirait que des paramètres du programme ont été modifiés.");
-//            System.out.println("Veuillez assigner à la variable 'nbJoueur', présente dans la classe Plateau,");
-//            System.out.println("la valeur '9' afin de pouvoir jouer.");
             System.exit(0);
         }
     }

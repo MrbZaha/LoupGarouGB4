@@ -233,7 +233,7 @@ public class Main {
             Affichage.aff(ConsoleText.WHITE_BOLD+"\n --- --- Fin secrète : Vous avez pris une autre voie. --- --- "+ConsoleText.RESET);
         }
 
-        Affichage.affSansAttente("\n Cette partie a duré "+tour+" jour(s).");
-        Affichage.affSansAttente("\n Vous avez survécu "+tourSurvecu+" jour(s).\n");
+        Affichage.affSansAttente("\n    Cette partie a duré "+tour+" jour(s).");
+        Affichage.affSansAttente("\n    Vous avez survécu "+tourSurvecu+" jour(s).\n");
     }
 }
