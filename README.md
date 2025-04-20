@@ -4,7 +4,7 @@
 ## Description
 Dans le cadre de mes études, j’ai eu l’occasion de travailler la Programmation Orientée Objet au travers de la création d’un jeu de cartes… Pour ne pas être contraire à moi-même et ma capacité à toujours jouer (plus ou moins volontairement) avec les règles, j’ai donc choisis de réaliser, en Java, un Jeu du Loup Garou de Thiercelieux.
 
-Ah oui, au début il y a un peu de texte. Se ce dernier fini par vous ennuyer après plusieurs parties relancées, vous pouvez juste commenter les lignes ... à ... dans la classe Plateau et recompiler le tout.
+Ah oui, au début il y a un peu de texte. Si ce dernier fini par vous ennuyer après plusieurs parties relancées, vous pouvez juste commenter les lignes 141 à 170 dans la classe Plateau et recompilez le tout.
 ***
 ## Pré-requis
 
