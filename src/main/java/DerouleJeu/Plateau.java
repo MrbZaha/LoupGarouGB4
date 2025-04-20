@@ -157,7 +157,6 @@ public class Plateau {
         phrasesSecretEnding.add("OUI");
         phrasesSecretEnding.add("si");
 
-
         String reponse = input.nextLine();
         if (phrasesSecretEnding.contains(reponse)) {
             secretEnding = true;

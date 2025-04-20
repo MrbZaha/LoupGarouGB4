@@ -22,7 +22,8 @@ public class Voleur extends Personnages{
     @Override
     public void actionNuit(Joueur joueurActuel, Joueur cible) {
         if (cible==null) {return;}                                 // Si personne n'est choisi, par sécurité
-        // J'ai utilisé la correction automatique d'intelliJ pour que ces 2 variables fonctionnent
+
+        // J'ai utilisé la correction automatique d'intelliJ pour que ces 2 variables fonctionnent ici
         final Personnages[] roleJoueurActuel = {new Joueur(null, joueurActuel.getPerso().getIdPerso(), null).getPerso()};
         final Personnages[] roleCible = {new Joueur(null, cible.getPerso().getIdPerso(), null).getPerso()};
 
@@ -30,7 +31,6 @@ public class Voleur extends Personnages{
         cible.getPerso().setNom(roleJoueurActuel[0].getNom());
 
         Runnable action = () -> {                                  // On stocke l'action dans un Runnable sans l'exécuter de suite
-
             joueurActuel.setPerso(roleCible[0].getIdPerso());  // Changement des rôles et initiation d'un nouveau
             cible.setPerso(roleJoueurActuel[0].getIdPerso());
 
