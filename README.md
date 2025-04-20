@@ -23,7 +23,7 @@ apt install maven
 ```
 ***
 ## Lancement
-**
+
 ### Sous linux (testé sous Linux Mint)
 Ouvrez votre terminal depuis la source du projet
 
@@ -97,7 +97,7 @@ Parties à 9 joueurs : **2 Loups Garous, Villageois, Voleur, Chasseur, Voyante, 
 **Cupidon** :  _Si l’un des deux Amoureux est un Loup-Garou et l’autre un Villageois, le but de la partie change pour eux. Pour vivre en paix leur amour et gagner la partie, ils doivent éliminer tous les autres joueurs, Loups-Garous et Villageois, en respectant les règles de jeu._
 ***
 ## Type Java
-Ce jeu a été testé sur Java 21 (sur IntelliJ et le terminal Windows) ainsi que sur Java 17.0.14 (sur le GNOME Terminal). Aucune librairie n’a été utilisée pour réaliser ce projet.
+Ce jeu a été testé sur Java 21 (sur IntelliJ et le terminal Windows) ainsi que sur Java 17.0.14 et 23.0.2 (sur le GNOME Terminal). Aucune librairie n’a été utilisée pour réaliser ce projet.
 
 ## OS de test
 Ce programme a été testé sur les Systèmes d’Exploitation **Linux Mint** ainsi que **Windows 11**.
